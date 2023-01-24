@@ -32,4 +32,4 @@ jobs:
           manifests: |
             manifests/api-deployment.yaml
             manifests/api-service.yaml
-          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar-api:api-${{ github.sha }}"
+          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:api-${{ github.sha }}"
