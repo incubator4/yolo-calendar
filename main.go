@@ -70,6 +70,13 @@ func main() {
 		}
 		c.String(http.StatusOK, cal.Serialize())
 	})
+	r.GET("/api/cal", func(c *gin.Context) {
+
+		calendars := pkg.ListCalendars(pkg.ListCalendarParams{All: true})
+		c.JSON(http.StatusOK, gin.H{
+			"data": calendars,
+		})
+	})
 	r.GET("/api/cal/:mixId", func(c *gin.Context) {
 		nameOrUID := c.Param("mixId")
 		var params pkg.ListCalendarParams
