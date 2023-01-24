@@ -6,6 +6,9 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 
 import AutoImport from "unplugin-auto-import/vite";
 
+// import postcssImport from "postcss-import";
+// import tailwindcss from "tailwindcss";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -27,6 +30,11 @@ export default defineConfig({
         target: "https://yolo.incubator4.com",
         changeOrigin: true,
       },
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [],
     },
   },
 });

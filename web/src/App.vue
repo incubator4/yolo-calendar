@@ -6,6 +6,10 @@ import Avatar from "./components/icons/Avatar.vue";
 import { useCharacterStore } from "@/stores";
 const store = useCharacterStore();
 store.fetchAll();
+
+const uidRoute = (val: any) => {
+  console.log(val);
+};
 </script>
 
 <template>
@@ -27,8 +31,12 @@ store.fetchAll();
         <RouterLink to="/about">About</RouterLink>
       </nav>
       <nav>
-        <RouterLink v-for="c in store.characters" :to="`/${c.uid}`">
-          <Avatar style="width: 48px; height: 48px" :uid="c.uid" />
+        <RouterLink
+          v-for="c in store.characters"
+          :key="c.id"
+          :to="{ name: 'uid-info', params: { uid: c.uid } }"
+        >
+          <Avatar style="width: 40px; height: 4px" :uid="c.uid" />
         </RouterLink>
       </nav>
     </div>
