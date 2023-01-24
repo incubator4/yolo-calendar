@@ -1,4 +1,4 @@
-name: Build Docker and Deploy to Kubernetes
+name: Deploy to Kubernetes
 
 on:
   - workflow_dispatch
