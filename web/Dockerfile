@@ -1,5 +1,6 @@
-FROM pnpmanager/pnp-manager as builder
+FROM node:16-alpine as builder
 WORKDIR /app
+RUN npm install -g pnpm
 ADD . .
 RUN pnpm install && pnpm build
 
