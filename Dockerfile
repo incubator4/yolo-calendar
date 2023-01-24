@@ -9,5 +9,6 @@ RUN go build -o /api-server main.go
 
 
 FROM alpine
+RUN apk add --no-cache tzdata
 COPY --from=build /api-server /api-server
 ENTRYPOINT ["/api-server"]
