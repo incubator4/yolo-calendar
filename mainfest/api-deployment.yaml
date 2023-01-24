@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: yolo-calendar-api
-          image: registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar/api
+          image: registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar-api
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
