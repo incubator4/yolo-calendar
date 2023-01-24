@@ -18,7 +18,7 @@ jobs:
         with:
           images: |
             registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar-api
-            ghcr.io/incubator4/yolo-calendar-api
+            ghcr.io/incubator4/yolo-calendar/api
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value=latest
