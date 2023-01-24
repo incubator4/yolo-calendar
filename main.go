@@ -15,7 +15,14 @@ func main() {
 	fmt.Println(config.GlobalConfig)
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	r := gin.Default()
-	r.GET("/api/uid/:uid", func(c *gin.Context) {
+	r.GET("/api/characters", func(c *gin.Context) {
+
+		characters := pkg.ListCharacter()
+		c.JSON(http.StatusOK, gin.H{
+			"data": characters,
+		})
+	})
+	r.GET("/api/characters/:uid", func(c *gin.Context) {
 		stringUID := c.Param("uid")
 		uid, err := strconv.Atoi(stringUID)
 		if err != nil {

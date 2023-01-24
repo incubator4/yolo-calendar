@@ -43,3 +43,9 @@ func GetCharacter(_c Character) *Character {
 	DB.Table("character").Where(&_c).First(c)
 	return c
 }
+
+func ListCharacter() []Character {
+	var characters []Character
+	DB.Table("character").Find(&characters)
+	return characters
+}
