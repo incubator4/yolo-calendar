@@ -5,7 +5,7 @@ WORKDIR /
 ADD go.* .
 RUN go mod download
 ADD . .
-RUN go build main.go /api-server
+RUN go build main.go -o /api-server
 
 
 FROM alpine
