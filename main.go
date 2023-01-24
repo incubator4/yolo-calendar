@@ -15,7 +15,7 @@ func main() {
 	fmt.Println(config.GlobalConfig)
 	loc, _ := time.LoadLocation("Asia/Shanghai")
 	r := gin.Default()
-	r.GET("/uid/:uid", func(c *gin.Context) {
+	r.GET("/api/uid/:uid", func(c *gin.Context) {
 		stringUID := c.Param("uid")
 		uid, err := strconv.Atoi(stringUID)
 		if err != nil {
@@ -29,7 +29,7 @@ func main() {
 			"data": character,
 		})
 	})
-	r.GET("/ics/:mixId", func(c *gin.Context) {
+	r.GET("/api/ics/:mixId", func(c *gin.Context) {
 		nameOrUID := c.Param("mixId")
 		var params pkg.ListCalendarParams
 		if nameOrUID == "team" {
