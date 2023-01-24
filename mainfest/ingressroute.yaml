@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: yolo-calendar
+  namespace: yolo
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: (Host(`yolo.incubator4.com`) || Host(`yolo.k3s.incubator4.com`)) && PathPrefix(`/api`)
+      kind: Rule
+      services:
+        - name: yolo-calendar-api
+          port: 8080
+    - match: Host(`yolo.incubator4.com`) || Host(`yolo.k3s.incubator4.com`)
+      kind: Rule
+      services:
+        - name: yolo-calendar-web
+          port: 80
+  tls:
+    secretName: yolo-calendar-tls
