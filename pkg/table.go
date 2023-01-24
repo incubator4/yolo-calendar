@@ -11,8 +11,8 @@ type Calendar struct {
 }
 
 type Character struct {
-	ID     int
-	Name   string
-	UID    int `json:"uid" gorm:"column:uid"`
-	LiveID int `json:"live_id" gorm:"column:live_id"`
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	UID    int    `json:"uid" gorm:"column:uid"`
+	LiveID int    `json:"live_id" gorm:"column:live_id"`
 }
