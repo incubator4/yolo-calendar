@@ -26,10 +26,14 @@ jobs:
             manifests/ingressroute.yaml
             manifests/certificate.yaml
       - name: Deploy to Kubernetes cluster
-        uses: Azure/k8s-deploy@v3.0
+        uses: Azure/k8s-deploy@v4
         with:
           namespace: "yolo"
           manifests: |
             manifests/api-deployment.yaml
             manifests/api-service.yaml
-          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:api-${{ github.sha }}"
+            manifests/web-deployment.yaml
+            manifests/web-service.yaml
+          images: |
+            "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:api-${{ github.sha }}"
+            "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:web-${{ github.sha }}"
