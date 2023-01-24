@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-calendar-api
+  namespace: yolo
+  labels:
+    app: yolo-calendar-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: yolo-calendar-api
+      labels:
+        app: yolo-calendar-api
+    spec:
+      containers:
+        - name: yolo-calendar-api
+          image: registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar/api
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: calendar
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: yolo-calendar-api
