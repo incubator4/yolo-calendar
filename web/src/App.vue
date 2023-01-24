@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from "./components/HelloWorld.vue";
+import Avatar from "./components/icons/Avatar.vue";
+
+import { useCharacterStore } from "@/stores";
+const store = useCharacterStore();
+store.fetchAll();
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img
+      alt="Vue logo"
+      class="logo"
+      src="@/assets/logo.svg"
+      width="125"
+      height="125"
+    />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
+
         <RouterLink to="/about">About</RouterLink>
+      </nav>
+      <nav>
+        <RouterLink v-for="c in store.characters" :to="`/${c.uid}`">
+          <Avatar style="width: 48px; height: 48px" :uid="c.uid" />
+        </RouterLink>
       </nav>
     </div>
   </header>

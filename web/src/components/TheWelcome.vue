@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import WelcomeItem from "./WelcomeItem.vue";
 import DocumentationIcon from "./icons/IconDocumentation.vue";
+import Avatar from "./icons/Avatar.vue";
+import Calendar from "./Calendar.vue";
 
 import { useCharacterStore } from "@/stores";
 
@@ -10,13 +12,14 @@ store.fetchAll();
 </script>
 
 <template>
-  <WelcomeItem style="margin: 100px" v-for="character in store.characters">
+  <WelcomeItem v-for="character in store.characters">
     <template #icon>
-      <DocumentationIcon />
+      <Avatar :uid="character.uid" />
     </template>
     <template #heading>
       <div>
         {{ character.name }}
+        <Calendar />
       </div>
     </template>
   </WelcomeItem>

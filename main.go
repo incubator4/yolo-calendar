@@ -70,6 +70,31 @@ func main() {
 		}
 		c.String(http.StatusOK, cal.Serialize())
 	})
+	r.GET("/api/cal/:mixId", func(c *gin.Context) {
+		nameOrUID := c.Param("mixId")
+		var params pkg.ListCalendarParams
+		if nameOrUID == "team" {
+			params.All = true
+		} else {
+			var character = new(pkg.Character)
+			intID, err := strconv.Atoi(nameOrUID)
+			if err != nil {
+				//c.JSON(http.StatusOK, gin.H{
+				//	"error": err,
+				//})
+				character = pkg.GetCharacter(pkg.Character{Name: nameOrUID})
+			} else {
+				character = pkg.GetCharacter(pkg.Character{UID: intID})
+			}
+
+			params.ID = character.ID
+
+		}
+		calendars := pkg.ListCalendars(params)
+		c.JSON(http.StatusOK, gin.H{
+			"data": calendars,
+		})
+	})
 	_ = r.Run()
 	//cal := ics.NewCalendar()
 	//cal.SetMethod(ics.MethodRequest)
