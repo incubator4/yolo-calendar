@@ -1,7 +1,10 @@
 FROM golang:alpine as build
 
-ADD . .
+ARG GO111MODULE=on
+WORKDIR /
+ADD go.* .
 RUN go mod download
+ADD . .
 RUN go build main.go /api-server
 
 
