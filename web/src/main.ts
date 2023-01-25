@@ -6,7 +6,6 @@ import router from "./router";
 
 import "./assets/main.css";
 import "v-calendar/dist/style.css";
-import "vue3-status-indicator/dist/style.css";
 
 const app = createApp(App);
 

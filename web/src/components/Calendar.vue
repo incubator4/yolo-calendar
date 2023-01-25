@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Calendar } from "v-calendar";
-import { Vue3StatusIndicator } from "vue3-status-indicator";
+import Dot from "./Dot.vue";
 
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
@@ -72,10 +72,9 @@ const onClipboard = () => {
           :key="attr.key"
           :attribute="attr"
         >
-          <Vue3StatusIndicator
-            style="width: 8px; height: 8px"
-            :bgColor="attr.customData.color"
-            pause
+          <Dot
+            style="width: 16px; height: 16px"
+            :color="attr.customData.color"
           />
           {{ zeroPad(attr.customData.time, 2) }} - {{ attr.customData.title }}
         </div>
