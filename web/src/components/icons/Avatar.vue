@@ -25,7 +25,7 @@ const props = defineProps({
   uid: Number,
 });
 const attrs = useAttrs();
-const src = ref(`/src/assets/avatar/${props.uid}.jpg`);
+const src = ref(`/src/assets/avatar/${props.uid}.webp`);
 
 // axios
 //   .get<{ face: string }>(`https://api.vtbs.moe/v1/detail/${props.uid}/`)
