@@ -36,7 +36,6 @@ watch(
 const attrs = computed(() => [
   ...store.calendars.map((c) => {
     const dates = new Date(c.dateTime);
-    dates.setHours(dates.getHours() - 8);
     return {
       key: `${c.dateTime} - ${c.title}`,
       dates,

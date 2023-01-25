@@ -8,12 +8,10 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func main() {
 	fmt.Println(config.GlobalConfig)
-
 	r := gin.Default()
 	r.GET("/api/characters", func(c *gin.Context) {
 
@@ -57,9 +55,7 @@ func main() {
 
 		}
 		calendars := pkg.ListCalendars(params)
-		for _, calendar := range calendars {
-			calendar.DateTime = calendar.DateTime.Add(-8 * time.Hour).In(pkg.Loc)
-		}
+
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)
 		cal.SetTzid("Asia/Shanghai")
