@@ -36,7 +36,7 @@ const uidRoute = (val: any) => {
           :key="c.id"
           :to="{ name: 'uid-info', params: { uid: c.uid } }"
         >
-          <Avatar style="width: 40px; height: 4px" :uid="c.uid" />
+          <Avatar style="width: 40px; height: 40px" :uid="c.uid" />
         </RouterLink>
       </nav>
     </div>
