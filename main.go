@@ -58,6 +58,7 @@ func main() {
 		calendars := pkg.ListCalendars(params)
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)
+		cal.SetTzid("Asia/Shanghai")
 
 		for _, calendar := range calendars {
 			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, calendar.DateTime))
