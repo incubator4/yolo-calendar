@@ -33,6 +33,25 @@ watch(
   }
 );
 
+const today = computed(() => {
+  if (store.calendars && store.calendars.length > 0) {
+    return [
+      {
+        key: "today",
+        highlight: {
+          fillMode: "light",
+          style: {
+            backgroundColor: colorMatrix(store.calendars[0].cid),
+          },
+        },
+        dates: new Date(),
+      },
+    ];
+  } else {
+    return [];
+  }
+});
+
 const attrs = computed(() => [
   ...store.calendars.map((c) => {
     const dates = new Date(c.dateTime);
@@ -50,12 +69,13 @@ const attrs = computed(() => [
       },
       dot: {
         style: {
-          marginTop: "5px",
+          marginTop: "10px",
           backgroundColor: colorMatrix(c.cid),
         },
       },
     };
   }),
+  ...today.value,
 ]);
 
 const ics = ref("");

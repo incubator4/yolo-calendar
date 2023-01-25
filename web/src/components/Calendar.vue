@@ -12,7 +12,12 @@ const store = useCharacterStore();
 const today = [
   {
     key: "today",
-    highlight: "red",
+    highlight: {
+      fillMode: "light",
+      style: {
+        backgroundColor: colorMatrix(0),
+      },
+    },
     dates: new Date(),
   },
 ];
