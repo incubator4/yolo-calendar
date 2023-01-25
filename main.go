@@ -8,6 +8,7 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -56,6 +57,9 @@ func main() {
 
 		}
 		calendars := pkg.ListCalendars(params)
+		for _, calendar := range calendars {
+			calendar.DateTime = calendar.DateTime.Add(-8 * time.Hour).In(pkg.Loc)
+		}
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)
 		cal.SetTzid("Asia/Shanghai")
