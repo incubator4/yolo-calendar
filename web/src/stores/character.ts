@@ -11,6 +11,7 @@ interface ICharacter {
 interface ICalendar {
   title: string;
   dateTime: Date;
+  cid: number;
 }
 
 export const useCharacterStore = defineStore("character", () => {
