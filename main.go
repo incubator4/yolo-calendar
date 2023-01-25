@@ -8,12 +8,11 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func main() {
 	fmt.Println(config.GlobalConfig)
-	loc, _ := time.LoadLocation("Asia/Shanghai")
+
 	r := gin.Default()
 	r.GET("/api/characters", func(c *gin.Context) {
 
@@ -61,10 +60,9 @@ func main() {
 		cal.SetMethod(ics.MethodRequest)
 
 		for _, calendar := range calendars {
-			realTime := calendar.DateTime.Add(-8 * time.Hour).In(loc)
-			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, realTime))
-			e.SetCreatedTime(realTime)
-			e.SetStartAt(realTime)
+			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, calendar.DateTime))
+			e.SetCreatedTime(calendar.DateTime)
+			e.SetStartAt(calendar.DateTime)
 			e.SetSummary(calendar.Title)
 			cal.AddVEvent(e)
 		}

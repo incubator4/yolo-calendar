@@ -4,9 +4,12 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"time"
 )
 
 var DB *gorm.DB
+
+var Loc *time.Location
 
 func init() {
 	var err error
@@ -21,6 +24,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	Loc, _ = time.LoadLocation("Asia/Shanghai")
 }
 
 type ListCalendarParams struct {
@@ -34,6 +39,10 @@ func ListCalendars(params ListCalendarParams) []Calendar {
 		DB.Table("calendar").Find(&calendars)
 	} else {
 		DB.Table("calendar").Find(&calendars, params.ID)
+	}
+
+	for _, calendar := range calendars {
+		calendar.DateTime = calendar.DateTime.Add(-8 * time.Hour).In(Loc)
 	}
 	return calendars
 }
