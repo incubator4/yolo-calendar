@@ -1,22 +1,117 @@
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores";
+import { Calendar } from "v-calendar";
+import { Vue3StatusIndicator } from "vue3-status-indicator";
+import { useScreen } from "vue-screen";
+import colorMatrix from "@/tools/color";
+import useClipboard from "vue-clipboard3";
 const props = defineProps({ uid: String });
 
 const store = useCharacterStore();
+const screen = useScreen();
+
+const loadData = (uid: number) => {
+  store.clearCalendar();
+  store.getCalendar(uid);
+};
+
+onMounted(() => {
+  loadData(+(props.uid as string));
+});
+
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, "0");
 
 watch(
   () => props.uid,
   (newUID, oldUID) => {
     if (newUID !== "" && newUID !== undefined && newUID !== oldUID) {
       const uid = +(newUID as string);
-      store.clearCalendar();
-      store.getCalendar(uid);
+      loadData(uid);
     }
   }
 );
+
+const attrs = computed(() => [
+  ...store.calendars.map((c) => {
+    const dates = new Date(c.dateTime);
+    dates.setHours(dates.getHours() - 8);
+    return {
+      key: `${c.dateTime} - ${c.title}`,
+      dates,
+      popover: {
+        label: c.title,
+        visibility: "focus",
+      },
+      customData: {
+        title: c.title,
+        time: dates.getHours(),
+        color: colorMatrix(c.cid),
+      },
+      dot: {
+        style: {
+          marginTop: "5px",
+          backgroundColor: colorMatrix(c.cid),
+        },
+      },
+    };
+  }),
+]);
+
+const ics = ref("webcal://yolo.incubator4.com/api/ics/" + props.uid);
+const { toClipboard } = useClipboard();
+const onClipboard = () => {
+  toClipboard(ics.value);
+  alert("复制成功");
+};
 </script>
 
 <template>
-  <p>{{ uid }}</p>
-  <div v-for="c in store.calendars">{{ c }}</div>
+  <main>
+    <div style="margin-bottom: 5px; max-height: 42px">
+      <a :href="ics" style="margin: 10px">
+        <button class="button">订阅到日历</button>
+      </a>
+      <a @click="onClipboard" style="margin: 10px">
+        <button class="button">复制到剪贴板</button>
+      </a>
+    </div>
+    <Calendar
+      :columns="screen.width > 1024 ? 2 : 1"
+      :rows="screen.height > 600 ? 2 : 1"
+      :attributes="attrs"
+    >
+      <template #day-popover="{ day, format, masks, attributes }">
+        <div>{{ format(day.date, masks.dayPopover) }}</div>
+        <div>
+          <div
+            v-for="attr in attributes"
+            :hideIndicator="true"
+            :key="attr.key"
+            :attribute="attr"
+          >
+            <Vue3StatusIndicator
+              style="width: 8px; height: 8px"
+              :bgColor="attr.customData.color"
+              pause
+            />
+            {{ zeroPad(attr.customData.time, 2) }} - {{ attr.customData.title }}
+          </div>
+        </div>
+      </template>
+    </Calendar>
+  </main>
 </template>
+
+<style scoped>
+.button {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  color: #333;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: "微软雅黑", arail;
+  cursor: pointer;
+}
+</style>

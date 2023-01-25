@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Calendar, PopoverRow } from "v-calendar";
+import { Calendar } from "v-calendar";
 import { Vue3StatusIndicator } from "vue3-status-indicator";
-import "vue3-status-indicator/dist/style.css";
+
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
+import useClipboard from "vue-clipboard3";
 const zeroPad = (num: number, places: number) =>
   String(num).padStart(places, "0");
 const store = useCharacterStore();
@@ -43,9 +44,24 @@ const attrs = computed(() => [
   }),
   ...today,
 ]);
+
+const ics = ref("webcal://yolo.incubator4.com/api/ics");
+const { toClipboard } = useClipboard();
+const onClipboard = () => {
+  toClipboard(ics.value);
+  alert("复制成功");
+};
 </script>
 
 <template>
+  <div style="margin: 5px">
+    <a :href="ics" style="margin: 10px">
+      <button class="button">订阅到日历</button>
+    </a>
+    <a @click="onClipboard" style="margin: 10px">
+      <button class="button">复制到剪贴板</button>
+    </a>
+  </div>
   <Calendar is-expanded :attributes="attrs" :rows="2">
     <template #day-popover="{ day, format, masks, attributes }">
       <div>{{ format(day.date, masks.dayPopover) }}</div>
@@ -67,3 +83,16 @@ const attrs = computed(() => [
     </template>
   </Calendar>
 </template>
+
+<style scoped>
+.button {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  color: #333;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: "微软雅黑", arail;
+  cursor: pointer;
+}
+</style>
