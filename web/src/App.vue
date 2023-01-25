@@ -17,7 +17,7 @@ const uidRoute = (val: any) => {
     <img
       alt="Vue logo"
       class="logo"
-      src="https://i2.hdslb.com/bfs/face/4194ba2ea899e9489b81c23d632d6cca3d4f492d.jpg"
+      src="@/assets/yolo.jpg"
       width="125"
       height="125"
     />

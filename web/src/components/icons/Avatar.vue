@@ -20,18 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import axios from "axios";
+// import axios from "axios";
 const props = defineProps({
   uid: Number,
 });
 const attrs = useAttrs();
-const src = ref("");
+const src = ref(`/src/assets/avatar/${props.uid}.jpg`);
 
-axios
-  .get<{ face: string }>(`https://api.vtbs.moe/v1/detail/${props.uid}/`)
-  .then((res) => {
-    src.value = res.data.face;
-  });
+// axios
+//   .get<{ face: string }>(`https://api.vtbs.moe/v1/detail/${props.uid}/`)
+//   .then((res) => {
+//     src.value = res.data.face;
+//   });
 </script>
 
 <style scoped>
