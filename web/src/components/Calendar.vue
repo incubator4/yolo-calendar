@@ -4,7 +4,6 @@ import Dot from "./Dot.vue";
 
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
-import useClipboard from "vue-clipboard3";
 const zeroPad = (num: number, places: number) =>
   String(num).padStart(places, "0");
 const store = useCharacterStore();
@@ -48,24 +47,9 @@ const attrs = computed(() => [
   }),
   ...today,
 ]);
-
-const ics = ref("webcal://yolo.incubator4.com/api/ics");
-const { toClipboard } = useClipboard();
-const onClipboard = () => {
-  toClipboard(ics.value);
-  alert("复制成功");
-};
 </script>
 
 <template>
-  <div style="margin: 5px">
-    <a :href="ics" style="margin: 10px">
-      <button class="button">订阅到日历</button>
-    </a>
-    <a @click="onClipboard" style="margin: 10px">
-      <button class="button">复制到剪贴板</button>
-    </a>
-  </div>
   <Calendar is-expanded :attributes="attrs" :rows="2">
     <template #day-popover="{ day, format, masks, attributes }">
       <div>{{ format(day.date, masks.dayPopover) }}</div>

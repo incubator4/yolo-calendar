@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import WelcomeItem from "./WelcomeItem.vue";
-import DocumentationIcon from "./icons/IconDocumentation.vue";
 import Avatar from "./icons/Avatar.vue";
 import Calendar from "./Calendar.vue";
 

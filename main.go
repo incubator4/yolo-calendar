@@ -8,6 +8,7 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -64,6 +65,7 @@ func main() {
 			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, calendar.DateTime))
 			e.SetCreatedTime(calendar.DateTime)
 			e.SetStartAt(calendar.DateTime)
+			e.SetEndAt(calendar.DateTime.Add(4 * time.Hour))
 			e.SetSummary(calendar.Title)
 			cal.AddVEvent(e)
 		}
