@@ -11,6 +11,7 @@ const store = useCharacterStore();
 const screen = useScreen();
 
 const loadData = (uid: number) => {
+  ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
   store.clearCalendar();
   store.getCalendar(uid);
 };
@@ -58,7 +59,7 @@ const attrs = computed(() => [
   }),
 ]);
 
-const ics = ref("webcal://yolo.incubator4.com/api/ics/" + props.uid);
+const ics = ref("");
 const { toClipboard } = useClipboard();
 const onClipboard = () => {
   toClipboard(ics.value);
