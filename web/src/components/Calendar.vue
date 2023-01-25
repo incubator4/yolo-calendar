@@ -1,68 +1,53 @@
 <script setup lang="ts">
-// Documentation: https://antoniandre.github.io/vue-cal
+import { Calendar } from "v-calendar";
 
-import VueCal from "vue-cal";
 import { useCharacterStore } from "@/stores";
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, "0");
 const store = useCharacterStore();
 
-const flag = ref(false);
-store.listCalendar().then(() => {
-  flag.value = true;
-});
-const print = console.log;
+const today = [
+  {
+    key: "today",
+    highlight: "red",
+    dates: new Date(),
+  },
+];
 
-const events = computed(() =>
-  store.calendars.map((c) => {
-    const start = new Date(c.dateTime);
-    const end = new Date(c.dateTime);
-    end.setHours(end.getHours() + 1);
+store.listCalendar();
+const attrs = computed(() => [
+  ...store.calendars.map((c) => {
+    const dates = new Date(c.dateTime);
+    console.log(c.dateTime, "   ", dates);
     return {
-      start,
-      end,
-      title: c.title,
+      key: `${c.dateTime} - ${c.title}`,
+      dates,
+      popover: {
+        label: c.title,
+      },
+      customData: {
+        title: c.title,
+        time: dates.getHours(),
+      },
+      highlight: {
+        color: "purple",
+        fillMode: "light",
+      },
     };
-  })
-);
+  }),
+  ...today,
+]);
 </script>
 
 <template>
-  <VueCal
-    v-if="flag"
-    class="vuecal--blue-theme cal"
-    locale="zh-cn"
-    :disable-views="['years', 'year']"
-    :time-from="8 * 60"
-    :time-to="24 * 60"
-    :time-step="120"
-    timeFormat=""
-    :events="events"
-  >
-    <template #cell-content="{ cell, view, events, goNarrower }">
-      <span
-        style="backgroud: #abacdb"
-        class="vuecal__cell-date"
-        :class="view.id"
-        v-if="view.id === 'day'"
-        @click="goNarrower"
-      >
-        {{ cell.date.getDate() }}1111111
-      </span>
-      <span
-        class="vuecal__cell-events-count"
-        v-if="view.id === 'month' && events.length"
-        >{{ events.length }}</span
-      >
-      <span
-        class="vuecal__no-event"
-        v-if="['week', 'day'].includes(view.id) && !events.length"
-        >Nothing here 👌</span
-      >
+  <Calendar is-expanded :attributes="attrs" :rows="2">
+    <template #day-popover="{ day, format, masks, attributes }">
+      <div>{{ format(day.date, masks.dayPopover) }}</div>
+      <div v-for="attr in attributes">
+        <popover-row :key="attr.key" :attribute="attr">
+          {{ zeroPad(attr.customData.time, 2) }} - {{ attr.customData.title }}
+        </popover-row>
+      </div>
     </template>
-  </VueCal>
+  </Calendar>
 </template>
-
-<style scoped>
-.cal {
-  max-height: 500px;
-}
-</style>

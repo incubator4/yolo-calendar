@@ -6,6 +6,7 @@ import router from "./router";
 
 import "./assets/main.css";
 import "vue-cal/dist/vuecal.css";
+import "v-calendar/dist/style.css";
 
 const app = createApp(App);
 
