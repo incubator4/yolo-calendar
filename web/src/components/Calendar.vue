@@ -47,6 +47,14 @@ const attrs = computed(() => [
   }),
   ...today,
 ]);
+
+interface attr {
+  customData: {
+    time: number;
+  };
+}
+const sortAttr = (a: attr, b: attr) =>
+  a.customData.time > b.customData.time ? 1 : -1;
 </script>
 
 <template>
@@ -55,7 +63,7 @@ const attrs = computed(() => [
       <div>{{ format(day.date, masks.dayPopover) }}</div>
       <div>
         <div
-          v-for="attr in attributes"
+          v-for="attr in attributes.sort(sortAttr)"
           :hideIndicator="true"
           :key="attr.key"
           :attribute="attr"
