@@ -4,6 +4,9 @@ import Dot from "./Dot.vue";
 
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
+import moment from "moment";
+import { groupBy, cloneDeep } from "lodash";
+
 const zeroPad = (num: number, places: number) =>
   String(num).padStart(places, "0");
 const store = useCharacterStore();
@@ -20,6 +23,19 @@ const today = [
     dates: new Date(),
   },
 ];
+
+const startOfWeek = moment().startOf("week").add(1, "days").toDate();
+const endofWeek = moment().endOf("week").add(1, "days").toDate();
+
+const currentWeekRange = computed(() => {
+  const dates = [];
+  for (let i = 0; i <= 6; i++) {
+    dates.push(moment(startOfWeek).add(i, "days"));
+  }
+  return dates;
+});
+
+const currentDay = ref(today[0].dates.getDay());
 
 store.listCalendar();
 const attrs = computed(() => [
@@ -48,6 +64,21 @@ const attrs = computed(() => [
   ...today,
 ]);
 
+const currentWeekCal = computed(() =>
+  groupBy(
+    store.calendars
+      .filter(({ dateTime }) => {
+        const date = new Date(dateTime);
+        return date > startOfWeek && date < endofWeek;
+      })
+      .sort((a, b) => (a.dateTime > b.dateTime ? 1 : -1)),
+    (event) => {
+      const index = new Date(event.dateTime).getDay();
+      return index === 0 ? 7 : index;
+    }
+  )
+);
+
 interface attr {
   customData: {
     time: number;
@@ -58,36 +89,61 @@ const sortAttr = (a: attr, b: attr) =>
 </script>
 
 <template>
-  <Calendar is-expanded :attributes="attrs" :rows="2">
-    <template #day-popover="{ day, format, masks, attributes }">
-      <div>{{ format(day.date, masks.dayPopover) }}</div>
-      <div>
-        <div
-          v-for="attr in attributes.sort(sortAttr)"
-          :hideIndicator="true"
-          :key="attr.key"
-          :attribute="attr"
-        >
-          <Dot
-            style="width: 16px; height: 16px"
-            :color="attr.customData.color"
-          />
-          {{ zeroPad(attr.customData.time, 2) }} - {{ attr.customData.title }}
-        </div>
-      </div>
-    </template>
-  </Calendar>
+  <el-carousel
+    :interval="4000"
+    :initial-index="currentDay === 0 ? 6 : currentDay - 1"
+    indicator-position="none"
+    :autoplay="false"
+    :loop="false"
+    type="card"
+    height="600px"
+  >
+    <el-carousel-item v-for="item in 7" :key="item">
+      <el-card class="box-card">
+        <template #header>
+          <div class="card-header">
+            <span>{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}</span>
+          </div>
+        </template>
+        <el-timeline>
+          <el-timeline-item
+            v-for="(event, index) in currentWeekCal[item]"
+            :key="index"
+            :color="colorMatrix(event.cid)"
+            :timestamp="new Date(event.dateTime).getHours() + '点'"
+          >
+            {{ event.title }}
+          </el-timeline-item>
+        </el-timeline>
+      </el-card>
+    </el-carousel-item>
+  </el-carousel>
 </template>
 
 <style scoped>
 .button {
   padding: 10px 20px;
   border: 1px solid #ddd;
-  color: #333;
+  /* color: #333; */
   background-color: #fff;
   border-radius: 4px;
   font-size: 14px;
   font-family: "微软雅黑", arail;
   cursor: pointer;
+}
+.el-carousel__item h3 {
+  /* color: #475669; */
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  /* background-color: #99a9bf; */
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  /* background-color: #d3dce6; */
 }
 </style>

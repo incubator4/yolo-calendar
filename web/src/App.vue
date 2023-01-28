@@ -15,7 +15,7 @@ const uidRoute = (val: any) => {
 <template>
   <header>
     <img
-      alt="Vue logo"
+      alt="Yolo logo"
       class="logo"
       src="@/assets/yolo.jpg"
       width="125"
