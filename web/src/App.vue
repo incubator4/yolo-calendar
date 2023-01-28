@@ -2,14 +2,6 @@
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
 import Avatar from "./components/icons/Avatar.vue";
-
-import { useCharacterStore } from "@/stores";
-const store = useCharacterStore();
-store.fetchAll();
-
-const uidRoute = (val: any) => {
-  console.log(val);
-};
 </script>
 
 <template>
@@ -27,17 +19,8 @@ const uidRoute = (val: any) => {
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-
+        <RouterLink to="/characters">Vtuber</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-      </nav>
-      <nav>
-        <RouterLink
-          v-for="c in store.characters"
-          :key="c.id"
-          :to="{ name: 'uid-info', params: { uid: c.uid } }"
-        >
-          <Avatar style="width: 40px; height: 40px" :uid="c.uid" />
-        </RouterLink>
       </nav>
     </div>
   </header>

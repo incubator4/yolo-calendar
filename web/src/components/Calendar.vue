@@ -1,31 +1,17 @@
 <script setup lang="ts">
-import { Calendar } from "v-calendar";
-import Dot from "./Dot.vue";
-
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
 import moment from "moment";
-import { groupBy, cloneDeep } from "lodash";
+import { groupBy } from "lodash";
+import Avatar from "./icons/Avatar.vue";
 
-const zeroPad = (num: number, places: number) =>
-  String(num).padStart(places, "0");
 const store = useCharacterStore();
 
-const today = [
-  {
-    key: "today",
-    highlight: {
-      fillMode: "light",
-      style: {
-        backgroundColor: colorMatrix(0),
-      },
-    },
-    dates: new Date(),
-  },
-];
+const getUID = (cid: number) =>
+  (store.characters.find((c) => c.id === cid) || { uid: 0 }).uid;
 
-const startOfWeek = moment().startOf("week").add(1, "days").toDate();
-const endofWeek = moment().endOf("week").add(1, "days").toDate();
+const startOfWeek = moment().startOf("week").toDate();
+const endofWeek = moment().endOf("week").toDate();
 
 const currentWeekRange = computed(() => {
   const dates = [];
@@ -35,34 +21,9 @@ const currentWeekRange = computed(() => {
   return dates;
 });
 
-const currentDay = ref(today[0].dates.getDay());
+const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 
 store.listCalendar();
-const attrs = computed(() => [
-  ...store.calendars.map((c) => {
-    const dates = new Date(c.dateTime);
-    return {
-      key: `${c.dateTime} - ${c.title}`,
-      dates,
-      popover: {
-        label: c.title,
-        visibility: "focus",
-      },
-      customData: {
-        title: c.title,
-        time: dates.getHours(),
-        color: colorMatrix(c.cid),
-      },
-      dot: {
-        style: {
-          marginTop: "5px",
-          backgroundColor: colorMatrix(c.cid),
-        },
-      },
-    };
-  }),
-  ...today,
-]);
 
 const currentWeekCal = computed(() =>
   groupBy(
@@ -86,10 +47,31 @@ interface attr {
 }
 const sortAttr = (a: attr, b: attr) =>
   a.customData.time > b.customData.time ? 1 : -1;
+
+const matchWeek = (index: number) => {
+  switch (index) {
+    case 1:
+      return "星期一";
+    case 2:
+      return "星期二";
+    case 3:
+      return "星期三";
+    case 4:
+      return "星期四";
+    case 5:
+      return "星期五";
+    case 6:
+      return "星期六";
+    case 7:
+      return "星期日";
+  }
+};
 </script>
 
 <template>
+  <el-skeleton v-if="false" :rows="5" />
   <el-carousel
+    class="carousel"
     :interval="4000"
     :initial-index="currentDay === 0 ? 6 : currentDay - 1"
     indicator-position="none"
@@ -99,10 +81,15 @@ const sortAttr = (a: attr, b: attr) =>
     height="600px"
   >
     <el-carousel-item v-for="item in 7" :key="item">
+      <template #icon>111</template>
       <el-card class="box-card">
         <template #header>
           <div class="card-header">
-            <span>{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}</span>
+            <span
+              :style="{ fontWeight: currentDay === item ? 'bolder' : 'normal' }"
+              >{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}
+              {{ matchWeek(item) }}
+            </span>
           </div>
         </template>
         <el-timeline>
@@ -131,6 +118,11 @@ const sortAttr = (a: attr, b: attr) =>
   font-family: "微软雅黑", arail;
   cursor: pointer;
 }
+
+.carousel {
+  margin-top: 40px;
+}
+
 .el-carousel__item h3 {
   /* color: #475669; */
   opacity: 0.75;

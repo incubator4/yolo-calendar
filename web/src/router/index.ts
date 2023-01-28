@@ -18,6 +18,11 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
+      path: "/characters",
+      name: "Character",
+      component: () => import("../views/character/List.vue"),
+    },
+    {
       path: "/uid/:uid",
       name: "uid-info",
       props: true,

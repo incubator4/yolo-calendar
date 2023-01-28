@@ -1,5 +1,5 @@
 <template>
-  <img v-if="src !== ''" class="avatar" v-bind="attrs" :src="src" />
+  <el-avatar v-if="src !== ''" class="avatar" v-bind="attrs" :src="src" />
   <svg
     v-else
     t="1674584839181"

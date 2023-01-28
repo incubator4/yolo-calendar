@@ -10,6 +10,14 @@ import "element-plus/dist/index.css";
 import "./assets/main.css";
 import "v-calendar/dist/style.css";
 
+import moment from "moment";
+
+moment.locale("zh-cn", {
+  week: {
+    dow: 1,
+  },
+});
+
 const app = createApp(App);
 
 app.use(ElementPlus);
