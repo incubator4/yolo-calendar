@@ -2,9 +2,17 @@
 import { useCharacterStore } from "@/stores";
 import Avatar from "@/components/icons/Avatar.vue";
 import { useScreen } from "vue-screen";
+import useClipboard from "vue-clipboard3";
 import colorMatrix from "@/tools/color";
 
 const qqGroup = [781289057, 659081677, 374946805, 298018245, 736532313];
+
+const { toClipboard } = useClipboard();
+
+const onClipboard = (uid: number) => {
+  toClipboard("webcal://yolo.incubator4.com/api/ics/" + uid);
+  alert("复制成功");
+};
 
 const size = ref("");
 const screen = useScreen();
@@ -40,7 +48,7 @@ store.fetchAll();
                     :style="{
                       background: colorMatrix(id),
                       textAlign: 'center',
-                      fontSize: '36px',
+                      fontSize: '32px',
                       borderRadius: '8px',
                     }"
                     class="title"
@@ -105,6 +113,25 @@ store.fetchAll();
                     {{ qqGroup[id - 1] }}
                   </div>
                 </el-descriptions-item>
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item">日程</div>
+                  </template>
+                  <div class="cell-context">
+                    <el-link
+                      :href="`webcal://yolo.incubator4.com/api/ics/${uid}`"
+                      style="margin: 10px"
+                    >
+                      订阅到日历
+                    </el-link>
+                    <el-link
+                      @click="() => onClipboard(uid)"
+                      style="margin: 10px"
+                    >
+                      复制到剪贴板
+                    </el-link>
+                  </div>
+                </el-descriptions-item>
               </el-descriptions>
             </el-main>
           </el-container>
@@ -132,8 +159,7 @@ store.fetchAll();
   text-align: center;
   /* height: 180px; */
   /* min-width: 350px; */
-  width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   margin: 10px;
   text-align: center;
   border-radius: 4px;
