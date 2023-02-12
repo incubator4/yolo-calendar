@@ -29,21 +29,18 @@ func init() {
 }
 
 type ListCalendarParams struct {
-	ID  int
+	CID int
 	All bool
 }
 
-func ListCalendars(params ListCalendarParams) []Calendar {
-	var calendars []Calendar
+func ListCalendars(params ListCalendarParams) []CharacterCalendar {
+	var calendars []CharacterCalendar
 	if params.All {
-		DB.Table("calendar").Find(&calendars)
+		DB.Find(&calendars)
 	} else {
-		DB.Table("calendar").Find(&calendars, params.ID)
+		DB.Find(&calendars, params.CID)
 	}
 
-	for _, calendar := range calendars {
-		calendar.DateTime = calendar.DateTime.Add(-8 * time.Hour).In(Loc)
-	}
 	return calendars
 }
 

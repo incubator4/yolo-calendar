@@ -2,107 +2,14 @@ package main
 
 import (
 	"fmt"
-	ics "github.com/arran4/golang-ical"
-	"github.com/gin-gonic/gin"
-	"github.com/incubator4/yolo-calendar/pkg"
 	"github.com/incubator4/yolo-calendar/pkg/config"
-	"net/http"
-	"strconv"
-	"time"
+	"github.com/incubator4/yolo-calendar/pkg/route"
 )
 
 func main() {
 	fmt.Println(config.GlobalConfig)
-	r := gin.Default()
-	r.GET("/api/characters", func(c *gin.Context) {
+	r := route.NewServer()
 
-		characters := pkg.ListCharacter()
-		c.JSON(http.StatusOK, gin.H{
-			"data": characters,
-		})
-	})
-	r.GET("/api/characters/:uid", func(c *gin.Context) {
-		stringUID := c.Param("uid")
-		uid, err := strconv.Atoi(stringUID)
-		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"error": err,
-			})
-			return
-		}
-		character := pkg.GetCharacter(pkg.Character{UID: uid})
-		c.JSON(http.StatusOK, gin.H{
-			"data": character,
-		})
-	})
-	r.GET("/api/ics/:mixId", func(c *gin.Context) {
-		nameOrUID := c.Param("mixId")
-		var params pkg.ListCalendarParams
-		if nameOrUID == "team" {
-			params.All = true
-		} else {
-			var character = new(pkg.Character)
-			intID, err := strconv.Atoi(nameOrUID)
-			if err != nil {
-				//c.JSON(http.StatusOK, gin.H{
-				//	"error": err,
-				//})
-				character = pkg.GetCharacter(pkg.Character{Name: nameOrUID})
-			} else {
-				character = pkg.GetCharacter(pkg.Character{UID: intID})
-			}
-
-			params.ID = character.ID
-
-		}
-		calendars := pkg.ListCalendars(params)
-
-		cal := ics.NewCalendar()
-		cal.SetMethod(ics.MethodRequest)
-		cal.SetTzid("Asia/Shanghai")
-
-		for _, calendar := range calendars {
-			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, calendar.DateTime))
-			e.SetCreatedTime(calendar.DateTime)
-			e.SetStartAt(calendar.DateTime)
-			e.SetEndAt(calendar.DateTime.Add(4 * time.Hour))
-			e.SetSummary(calendar.Title)
-			cal.AddVEvent(e)
-		}
-		c.String(http.StatusOK, cal.Serialize())
-	})
-	r.GET("/api/cal", func(c *gin.Context) {
-
-		calendars := pkg.ListCalendars(pkg.ListCalendarParams{All: true})
-		c.JSON(http.StatusOK, gin.H{
-			"data": calendars,
-		})
-	})
-	r.GET("/api/cal/:mixId", func(c *gin.Context) {
-		nameOrUID := c.Param("mixId")
-		var params pkg.ListCalendarParams
-		if nameOrUID == "team" {
-			params.All = true
-		} else {
-			var character = new(pkg.Character)
-			intID, err := strconv.Atoi(nameOrUID)
-			if err != nil {
-				//c.JSON(http.StatusOK, gin.H{
-				//	"error": err,
-				//})
-				character = pkg.GetCharacter(pkg.Character{Name: nameOrUID})
-			} else {
-				character = pkg.GetCharacter(pkg.Character{UID: intID})
-			}
-
-			params.ID = character.ID
-
-		}
-		calendars := pkg.ListCalendars(params)
-		c.JSON(http.StatusOK, gin.H{
-			"data": calendars,
-		})
-	})
 	_ = r.Run()
 	//cal := ics.NewCalendar()
 	//cal.SetMethod(ics.MethodRequest)
