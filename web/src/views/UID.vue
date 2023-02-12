@@ -54,9 +54,9 @@ const today = computed(() => {
 
 const attrs = computed(() => [
   ...store.calendars.map((c) => {
-    const dates = new Date(c.dateTime);
+    const dates = new Date(c.start_time);
     return {
-      key: `${c.dateTime} - ${c.title}`,
+      key: `${c.start_time} - ${c.title}`,
       dates,
       popover: {
         label: c.title,
