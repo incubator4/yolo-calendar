@@ -3,7 +3,6 @@ import { useCharacterStore } from "@/stores";
 import Avatar from "@/components/icons/Avatar.vue";
 import { useScreen } from "vue-screen";
 import useClipboard from "vue-clipboard3";
-import colorMatrix from "@/tools/color";
 import {
   Calendar,
   ChatDotRound,
@@ -35,12 +34,12 @@ store.fetchAll();
     <el-scrollbar>
       <el-row>
         <template
-          v-for="{ uid, name, id, live_id } in store.characters"
+          v-for="{ uid, name, id, live_id, main_color } in store.characters"
           :key="id"
           class="scrollbar-demo-item"
           :style="{
-            color: colorMatrix(id),
-            border: `1px solid ${colorMatrix(id)}`,
+            color: main_color,
+            border: `1px solid ${main_color}`,
           }"
         >
           <el-col :lg="12" :span="24">
@@ -55,7 +54,7 @@ store.fetchAll();
                     ><Avatar class="avatar" :uid="uid"></Avatar
                   ></a>
 
-                  <el-button style="width: 120px" :color="colorMatrix(id)">
+                  <el-button style="width: 120px" :color="main_color">
                     <a
                       :href="`https://live.bilibili.com/${live_id}`"
                       style="font-size: 16px"

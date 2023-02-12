@@ -3,7 +3,6 @@ import { useCharacterStore } from "@/stores";
 import { Calendar } from "v-calendar";
 import Dot from "@/components/Dot.vue";
 import { useScreen } from "vue-screen";
-import colorMatrix from "@/tools/color";
 import useClipboard from "vue-clipboard3";
 const props = defineProps({ uid: String });
 
@@ -41,7 +40,7 @@ const today = computed(() => {
         highlight: {
           fillMode: "light",
           style: {
-            backgroundColor: colorMatrix(store.calendars[0].cid),
+            backgroundColor: "black",
           },
         },
         dates: new Date(),
@@ -65,12 +64,12 @@ const attrs = computed(() => [
       customData: {
         title: c.title,
         time: dates.getHours(),
-        color: colorMatrix(c.cid),
+        color: c.main_color,
       },
       dot: {
         style: {
           marginTop: "10px",
-          backgroundColor: colorMatrix(c.cid),
+          backgroundColor: c.main_color,
         },
       },
     };

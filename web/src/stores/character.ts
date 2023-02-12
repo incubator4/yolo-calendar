@@ -6,6 +6,7 @@ interface ICharacter {
   name: string;
   uid: number;
   live_id: number;
+  main_color: string;
 }
 
 interface ICalendar {

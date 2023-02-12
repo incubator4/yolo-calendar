@@ -1,6 +1,5 @@
 <script setup lang="tsx">
 import { useCharacterStore } from "@/stores";
-import colorMatrix from "@/tools/color";
 import moment from "moment";
 import { groupBy } from "lodash";
 import Avatar from "./icons/Avatar.vue";
@@ -100,7 +99,7 @@ const Icon = (uid: number) => {
           <el-timeline-item
             v-for="(event, index) in currentWeekCal[item]"
             :key="index"
-            :color="colorMatrix(event.cid)"
+            :color="event.main_color"
             :icon="Icon(event.uid)"
             :timestamp="new Date(event.start_time).getHours() + '点'"
           >
