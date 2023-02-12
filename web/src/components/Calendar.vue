@@ -28,13 +28,13 @@ store.listCalendar();
 const currentWeekCal = computed(() =>
   groupBy(
     store.calendars
-      .filter(({ dateTime }) => {
-        const date = new Date(dateTime);
+      .filter(({ start_time }) => {
+        const date = new Date(start_time);
         return date > startOfWeek && date < endofWeek;
       })
-      .sort((a, b) => (a.dateTime > b.dateTime ? 1 : -1)),
+      .sort((a, b) => (a.start_time > b.start_time ? 1 : -1)),
     (event) => {
-      const index = new Date(event.dateTime).getDay();
+      const index = new Date(event.start_time).getDay();
       return index === 0 ? 7 : index;
     }
   )
@@ -97,7 +97,7 @@ const matchWeek = (index: number) => {
             v-for="(event, index) in currentWeekCal[item]"
             :key="index"
             :color="colorMatrix(event.cid)"
-            :timestamp="new Date(event.dateTime).getHours() + '点'"
+            :timestamp="new Date(event.start_time).getHours() + '点'"
           >
             {{ event.title }}
           </el-timeline-item>

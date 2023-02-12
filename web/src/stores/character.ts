@@ -10,14 +10,17 @@ interface ICharacter {
 
 interface ICalendar {
   title: string;
-  dateTime: Date;
+  start_time: Date;
+  end_time: Date;
   cid: number;
 }
+
+type CharacterCalendar = Omit<ICalendar & ICharacter, "id">;
 
 export const useCharacterStore = defineStore("character", () => {
   const characters = ref<Array<ICharacter>>([]);
 
-  const calendars = ref<Array<ICalendar>>([]);
+  const calendars = ref<Array<CharacterCalendar>>([]);
 
   const fetchAll = () => {
     request.get<ICharacter[]>("/characters").then((res) => {
@@ -26,13 +29,13 @@ export const useCharacterStore = defineStore("character", () => {
   };
 
   const getCalendar = (uid: number) => {
-    return request.get<ICalendar[]>(`/cal/${uid}`).then((res) => {
+    return request.get<CharacterCalendar[]>(`/cal/${uid}`).then((res) => {
       calendars.value = res.data;
     });
   };
 
   const listCalendar = () => {
-    return request.get<ICalendar[]>(`/cal`).then((res) => {
+    return request.get<CharacterCalendar[]>(`/cal`).then((res) => {
       calendars.value = res.data;
     });
   };
