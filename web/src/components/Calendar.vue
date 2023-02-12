@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { useCharacterStore } from "@/stores";
 import colorMatrix from "@/tools/color";
 import moment from "moment";
@@ -66,6 +66,10 @@ const matchWeek = (index: number) => {
       return "星期日";
   }
 };
+
+const Icon = (uid: number) => {
+  <Avatar uid={uid}></Avatar>;
+};
 </script>
 
 <template>
@@ -97,9 +101,15 @@ const matchWeek = (index: number) => {
             v-for="(event, index) in currentWeekCal[item]"
             :key="index"
             :color="colorMatrix(event.cid)"
+            :icon="Icon(event.uid)"
             :timestamp="new Date(event.start_time).getHours() + '点'"
           >
-            {{ event.title }}
+            <el-link
+              :style="{ marginTop: '-8px' }"
+              target="_blank"
+              :href="`https://live.bilibili.com/${event.live_id}`"
+              >{{ event.title }}</el-link
+            >
           </el-timeline-item>
         </el-timeline>
       </el-card>
