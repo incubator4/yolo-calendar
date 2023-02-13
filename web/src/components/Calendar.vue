@@ -26,7 +26,7 @@ store.fetchAll();
 
 store.listCalendar({
   start: moment(startOfWeek).format("yyyy-MM-DD"),
-  end: moment(endofWeek).format("yyyy-MM-DD"),
+  end: moment(endofWeek).add(1, "days").format("yyyy-MM-DD"),
 });
 
 const currentWeekCal = computed(() =>
