@@ -68,7 +68,7 @@ const routes = [
     <div class="background-container">
       <img
         class="background-image"
-        src="@/assets/963577c30b61055f1eafbe8e6a5704c8.png"
+        src="	https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/assets/background.webp "
       />
       <div class="mask" />
       <div class="title">
