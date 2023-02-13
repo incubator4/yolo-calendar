@@ -7,7 +7,6 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func NewServer() *gin.Engine {
@@ -63,7 +62,7 @@ func NewServer() *gin.Engine {
 			e := ics.NewEvent(fmt.Sprintf("%d - %s", calendar.CharacterID, calendar.StartTime))
 			e.SetCreatedTime(calendar.StartTime)
 			e.SetStartAt(calendar.StartTime)
-			e.SetEndAt(calendar.EndTime.Add(4 * time.Hour))
+			e.SetEndAt(calendar.EndTime)
 			e.SetSummary(fmt.Sprintf("%s %s", calendar.Name, calendar.Title))
 			cal.AddVEvent(e)
 		}
