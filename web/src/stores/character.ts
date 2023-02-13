@@ -35,8 +35,8 @@ export const useCharacterStore = defineStore("character", () => {
     });
   };
 
-  const listCalendar = () => {
-    return request.get<CharacterCalendar[]>(`/cal`).then((res) => {
+  const listCalendar = (params?: { start?: string; end?: string }) => {
+    return request.get<CharacterCalendar[]>(`/cal`, { params }).then((res) => {
       calendars.value = res.data;
     });
   };

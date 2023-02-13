@@ -22,6 +22,8 @@ const currentWeekRange = computed(() => {
 
 const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 
+store.fetchAll();
+
 store.listCalendar({
   start: moment(startOfWeek).format("yyyy-MM-DD"),
   end: moment(endofWeek).format("yyyy-MM-DD"),
@@ -72,53 +74,102 @@ const matchWeek = (index: number) => {
 const Icon = (uid: number) => {
   <Avatar uid={uid}></Avatar>;
 };
+
+const checkboxVtubers = ref<Array<number>>([]);
+
+const checkAll = ref(false);
+const isIndeterminate = ref(true);
+const handleCheckAllChange = (val: boolean) => {
+  checkboxVtubers.value = val ? store.characters.map((c) => c.id) : [];
+  isIndeterminate.value = false;
+};
+
+const handleCheckedVtubersChange = (value: string[]) => {
+  const checkedCount = value.length;
+  checkAll.value = checkedCount === store.characters.length;
+  isIndeterminate.value =
+    checkedCount > 0 && checkedCount < store.characters.length;
+};
 </script>
 
 <template>
-  <el-skeleton v-if="false" :rows="5" />
-  <el-carousel
-    class="carousel"
-    :interval="4000"
-    :initial-index="currentDay === 0 ? 6 : currentDay - 1"
-    indicator-position="none"
-    :autoplay="false"
-    :loop="false"
-    type="card"
-    height="600px"
-  >
-    <el-carousel-item v-for="item in 7" :key="item">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span
-              :style="{ fontWeight: currentDay === item ? 'bolder' : 'normal' }"
-              >{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}
-              {{ matchWeek(item) }}
-            </span>
-          </div>
-        </template>
-        <el-timeline>
-          <el-timeline-item
-            v-for="(event, index) in currentWeekCal[item]"
-            :key="index"
-            :color="event.main_color"
-            :icon="Icon(event.uid)"
-            :timestamp="new Date(event.start_time).getHours() + '点'"
-          >
-            <el-link
-              :style="{ marginTop: '-8px' }"
-              target="_blank"
-              :href="`https://live.bilibili.com/${event.live_id}`"
-              >{{ event.title }}</el-link
+  <div class="wrapper">
+    <div class="check-wrapper" hidden>
+      <el-checkbox
+        v-model="checkAll"
+        :indeterminate="isIndeterminate"
+        @change="handleCheckAllChange"
+        >Check all</el-checkbox
+      >
+      <el-checkbox-group
+        v-model="checkboxVtubers"
+        @change="handleCheckedVtubersChange"
+        size="large"
+      >
+        <el-checkbox-button
+          v-for="c in store.characters"
+          :key="c.id"
+          :label="c.id"
+        >
+          <Avatar style="width: 20px; height: 20px" :uid="c.uid" />
+          <p>{{ c.name }}</p>
+        </el-checkbox-button>
+      </el-checkbox-group>
+    </div>
+    <el-skeleton v-if="false" :rows="5" />
+    <el-carousel
+      class="carousel"
+      :interval="4000"
+      :initial-index="currentDay === 0 ? 6 : currentDay - 1"
+      indicator-position="none"
+      :autoplay="false"
+      :loop="false"
+      type="card"
+      height="600px"
+    >
+      <el-carousel-item v-for="item in 7" :key="item">
+        <el-card class="box-card">
+          <template #header>
+            <div class="card-header">
+              <span
+                :style="{
+                  fontWeight: currentDay === item ? 'bolder' : 'normal',
+                }"
+                >{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}
+                {{ matchWeek(item) }}
+              </span>
+            </div>
+          </template>
+          <el-timeline>
+            <el-timeline-item
+              v-for="(event, index) in currentWeekCal[item]"
+              :key="index"
+              :color="event.main_color"
+              :icon="Icon(event.uid)"
+              :timestamp="new Date(event.start_time).getHours() + '点'"
             >
-          </el-timeline-item>
-        </el-timeline>
-      </el-card>
-    </el-carousel-item>
-  </el-carousel>
+              <el-link
+                :style="{ marginTop: '-8px' }"
+                target="_blank"
+                :href="`https://live.bilibili.com/${event.live_id}`"
+                >{{ event.title }}</el-link
+              >
+            </el-timeline-item>
+          </el-timeline>
+        </el-card>
+      </el-carousel-item>
+    </el-carousel>
+  </div>
 </template>
 
 <style scoped>
+.wrapper {
+  margin-top: 10px;
+}
+
+.check-wrapper {
+  margin: 5px;
+}
 .carousel {
   margin-top: 40px;
 }
