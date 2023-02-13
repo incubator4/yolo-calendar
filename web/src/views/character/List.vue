@@ -42,7 +42,7 @@ store.fetchAll();
             border: `1px solid ${main_color}`,
           }"
         >
-          <el-col :lg="12" :span="24">
+          <el-col :xs="24" :sm="12" :lg="6" :xl="4">
             <el-card style="margin: 10px">
               <el-row>
                 <el-col :span="8">
@@ -76,15 +76,11 @@ store.fetchAll();
                     </li>
 
                     <li class="scrollbar-demo-item">
-                      <el-button class="button">
-                        <a
-                          :href="`webcal://yolo.incubator4.com/api/ics/${uid}`"
-                          style="margin: 10px; color: black"
-                        >
-                          <el-icon><Calendar /></el-icon>
+                      <a :href="`webcal://yolo.incubator4.com/api/ics/${uid}`">
+                        <el-button class="button" :icon="Calendar">
                           订阅
-                        </a>
-                      </el-button>
+                        </el-button>
+                      </a>
                     </li>
                     <li class="scrollbar-demo-item">
                       <el-button
@@ -147,6 +143,6 @@ store.fetchAll();
   text-align: center;
 }
 .button {
-  width: 180px;
+  width: 160px;
 }
 </style>

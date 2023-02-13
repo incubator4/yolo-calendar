@@ -84,7 +84,6 @@ const Icon = (uid: number) => {
     height="600px"
   >
     <el-carousel-item v-for="item in 7" :key="item">
-      <template #icon>111</template>
       <el-card class="box-card">
         <template #header>
           <div class="card-header">
@@ -117,17 +116,6 @@ const Icon = (uid: number) => {
 </template>
 
 <style scoped>
-.button {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  /* color: #333; */
-  background-color: #fff;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: "微软雅黑", arail;
-  cursor: pointer;
-}
-
 .carousel {
   margin-top: 40px;
 }

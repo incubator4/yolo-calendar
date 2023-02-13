@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-
+import importToCDN, { autoComplete } from "vite-plugin-cdn-import";
 import AutoImport from "unplugin-auto-import/vite";
 
 // import postcssImport from "postcss-import";
@@ -17,6 +17,13 @@ export default defineConfig({
     AutoImport({
       imports: ["vue"],
       dts: "src/auto-import.d.ts",
+    }),
+    importToCDN({
+      modules: [
+        autoComplete("vue"),
+        autoComplete("axios"),
+        autoComplete("@vueuse/core"),
+      ],
     }),
   ],
   resolve: {

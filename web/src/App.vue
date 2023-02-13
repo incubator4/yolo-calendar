@@ -71,16 +71,9 @@ const routes = [
         src="@/assets/963577c30b61055f1eafbe8e6a5704c8.png"
       />
       <div class="mask" />
-      <div class="main-title">
-        <p :style="{ fontSize: `${screen.width > 800 ? 128 : 72}px` }">YOLO</p>
-        <p
-          :style="{
-            fontSize: `${screen.width > 800 ? 32 : 16}px`,
-            marginTop: `-${screen.width > 800 ? 40 : 20}px`,
-          }"
-        >
-          you only live once
-        </p>
+      <div class="title">
+        <p class="main">YOLO</p>
+        <p class="secondary">you only live once</p>
       </div>
     </div>
 
@@ -184,7 +177,7 @@ nav a:first-of-type {
     max-width: 100%;
     overflow: hidden;
     // overflow: hidden;
-    .main-title {
+    .title {
       position: absolute;
       width: 40%;
       height: 40%;
@@ -193,6 +186,33 @@ nav a:first-of-type {
       transform: translate(-50%, -50%);
       text-align: center;
       color: white;
+      .main {
+        font-size: 96px;
+        text-align: center;
+        margin-left: -40px;
+      }
+      .secondary {
+        margin-top: -30px;
+        font-size: 18px;
+      }
+      @media (min-width: 640px) {
+        .main {
+          font-size: 144px;
+        }
+        .secondary {
+          margin-top: -30px;
+          font-size: 28px;
+        }
+      }
+      @media (min-width: 1920px) {
+        .main {
+          font-size: 256px;
+        }
+        .secondary {
+          margin-top: -30px;
+          font-size: 48px;
+        }
+      }
     }
     .background-image {
       margin-left: -10px;
@@ -208,6 +228,8 @@ nav a:first-of-type {
       right: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.5);
+      background-image: radial-gradient(#000000 20%, transparent 0);
+      background-size: 18px 18px;
     }
   }
 }
