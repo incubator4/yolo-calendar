@@ -66,7 +66,7 @@ func getStartAndEndOfDate(c *gin.Context) (types.TimeRange, error) {
 			return types.TimeRange{}, fmt.Errorf("invalid end time format, expect YYYY-MM-DD, but got %s", endStr)
 		}
 	}
-	return types.TimeRange{Start: start, End: end}, nil
+	return types.TimeRange{Start: start.Add(-8 * time.Hour), End: end.Add(-8 * time.Hour)}, nil
 }
 
 func getCurrentWeekTimeRange() types.TimeRange {
