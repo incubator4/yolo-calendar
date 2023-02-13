@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import importToCDN, { autoComplete } from "vite-plugin-cdn-import";
 import AutoImport from "unplugin-auto-import/vite";
+import { chunkSplitPlugin } from "vite-plugin-chunk-split";
 
 // import postcssImport from "postcss-import";
 // import tailwindcss from "tailwindcss";
@@ -25,6 +26,7 @@ export default defineConfig({
         autoComplete("@vueuse/core"),
       ],
     }),
+    chunkSplitPlugin(),
   ],
   resolve: {
     alias: {
