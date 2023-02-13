@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"github.com/incubator4/yolo-calendar/pkg/config"
+	"github.com/incubator4/yolo-calendar/pkg/types"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"time"
@@ -29,16 +30,20 @@ func init() {
 }
 
 type ListCalendarParams struct {
-	CID int
-	All bool
+	CIDArray  []string
+	UIDArray  []string
+	TimeRange types.TimeRange
 }
 
 func ListCalendars(params ListCalendarParams) []CharacterCalendar {
 	var calendars []CharacterCalendar
-	if params.All {
-		DB.Find(&calendars)
+	db := params.TimeRange.DB(DB)
+	if len(params.CIDArray) > 0 {
+		db.Where("cid IN (?)", params.CIDArray).Find(&calendars)
+	} else if len(params.UIDArray) > 0 {
+		db.Where("uid IN (?)", params.UIDArray).Find(&calendars)
 	} else {
-		DB.Find(&calendars, params.CID)
+		db.Find(&calendars)
 	}
 
 	return calendars
