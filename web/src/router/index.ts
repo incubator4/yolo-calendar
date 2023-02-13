@@ -18,8 +18,8 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/characters",
-      name: "Character",
+      path: "/vtuber",
+      name: "Vtuber",
       component: () => import("../views/character/List.vue"),
     },
     {

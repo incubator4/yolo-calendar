@@ -1,10 +1,93 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-import Avatar from "./components/icons/Avatar.vue";
+import { useToggle, useDark } from "@vueuse/core";
+import { useRouter } from "vue-router";
+import { Sunny, Moon } from "@element-plus/icons-vue";
+import { useScreen } from "vue-screen";
+
+const screen = useScreen();
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+const router = useRouter();
+
+const handleSelect = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath);
+  router.push(key);
+};
+const routes = [
+  {
+    text: "Home",
+    path: "/",
+  },
+  {
+    text: "Vtuber",
+    path: "/vtuber",
+  },
+  {
+    text: "About",
+    path: "/about",
+  },
+];
 </script>
 
 <template>
+  <div class="wrapper">
+    <header class="header">
+      <el-row>
+        <el-col :span="4" class="logo"></el-col>
+        <el-col style="flex: 1 1 auto; text-align: center">
+          <el-menu
+            :default-active="$route.path"
+            class="el-menu-demo"
+            background-color="var(--el-bg-color-overlay)"
+            mode="horizontal"
+            @select="handleSelect"
+          >
+            <el-menu-item
+              v-for="({ text, path }, index) in routes"
+              :index="path"
+              >{{ text }}</el-menu-item
+            >
+          </el-menu>
+        </el-col>
+        <el-col style="flex: 0 1 100px">
+          <div class="right-menubar">
+            <el-switch
+              @change="toggleDark"
+              :active-icon="Sunny"
+              :inactive-icon="Moon"
+              v-model="isDark"
+              class="ml-2"
+            />
+          </div>
+        </el-col>
+      </el-row>
+    </header>
+
+    <div class="background-container">
+      <img
+        class="background-image"
+        src="@/assets/963577c30b61055f1eafbe8e6a5704c8.png"
+      />
+      <div class="mask" />
+      <div class="main-title">
+        <p :style="{ fontSize: `${screen.width > 800 ? 128 : 72}px` }">YOLO</p>
+        <p
+          :style="{
+            fontSize: `${screen.width > 800 ? 32 : 16}px`,
+            marginTop: `-${screen.width > 800 ? 40 : 20}px`,
+          }"
+        >
+          you only live once
+        </p>
+      </div>
+    </div>
+
+    <div class="route-backgroud"><RouterView /></div>
+  </div>
+
+  <!--
   <header>
     <img
       alt="Yolo logo"
@@ -23,36 +106,22 @@ import Avatar from "./components/icons/Avatar.vue";
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
+    
   </header>
 
   <RouterView />
+  -->
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
+<style scoped lang="less">
 nav a.router-link-exact-active {
   color: var(--color-text);
+  color: yellow;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
+// nav a.router-link-exact-active:hover {
+//   background-color: transparent;
+// }
 
 nav a {
   display: inline-block;
@@ -64,30 +133,89 @@ nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+// @media (min-width: 1024px) {
+//   header {
+//     display: flex;
+//     place-items: center;
+//     padding-right: calc(var(--section-gap) / 2);
+//   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+//   .logo {
+//     margin: 0 2rem 0 0;
+//   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+//   header .wrapper {
+//     display: flex;
+//     place-items: flex-start;
+//     flex-wrap: wrap;
+//   }
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+//   nav {
+//     text-align: left;
+//     margin-left: -1rem;
+//     font-size: 1rem;
 
-    padding: 1rem 0;
-    margin-top: 1rem;
+//     padding: 1rem 0;
+//     margin-top: 1rem;
+//   }
+// }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  .header {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: var(--el-bg-color-overlay);
+    .header-nav nav {
+      color: white;
+      text-align: center;
+    }
   }
+  .background-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    overflow: hidden;
+    // overflow: hidden;
+    .main-title {
+      position: absolute;
+      width: 40%;
+      height: 40%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+    }
+    .background-image {
+      margin-left: -10px;
+      margin-right: -10px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+.right-menubar {
+  margin-top: 12px;
+}
+.route-backgroud {
+  background-color: var(--el-bg-color-overlay);
 }
 </style>
