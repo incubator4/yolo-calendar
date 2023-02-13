@@ -22,15 +22,18 @@ const currentWeekRange = computed(() => {
 
 const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 
-store.listCalendar();
+store.listCalendar({
+  start: moment(startOfWeek).format("yyyy-MM-DD"),
+  end: moment(endofWeek).format("yyyy-MM-DD"),
+});
 
 const currentWeekCal = computed(() =>
   groupBy(
     store.calendars
-      .filter(({ start_time }) => {
-        const date = new Date(start_time);
-        return date > startOfWeek && date < endofWeek;
-      })
+      // .filter(({ start_time }) => {
+      //   const date = new Date(start_time);
+      //   return date > startOfWeek && date < endofWeek;
+      // })
       .sort((a, b) => (a.start_time > b.start_time ? 1 : -1)),
     (event) => {
       const index = new Date(event.start_time).getDay();
