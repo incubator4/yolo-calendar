@@ -23,10 +23,10 @@ const router = createRouter({
       component: () => import("../views/character/List.vue"),
     },
     {
-      path: "/uid/:uid",
-      name: "uid-info",
+      path: "/vtuber/:uid",
+      name: "VtuberDetail",
       props: true,
-      component: () => import("../views/UID.vue"),
+      component: () => import("../views/character/UID.vue"),
     },
   ],
 });

@@ -12,12 +12,13 @@ import (
 func ListCalendars(c *gin.Context) {
 	timeRange, err := getStartAndEndOfDate(c)
 	cids := c.QueryArray("cid")
+	uids := c.QueryArray("uid")
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"error": err.Error(),
 		})
 	} else {
-		calendars := pkg.ListCalendars(pkg.ListCalendarParams{CIDArray: cids, TimeRange: timeRange})
+		calendars := pkg.ListCalendars(pkg.ListCalendarParams{UIDArray: uids, CIDArray: cids, TimeRange: timeRange})
 		c.JSON(http.StatusOK, gin.H{
 			"data": calendars,
 		})

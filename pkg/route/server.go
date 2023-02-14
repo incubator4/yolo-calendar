@@ -54,16 +54,6 @@ func NewServer() *gin.Engine {
 		c.String(http.StatusOK, cal.Serialize())
 	})
 	r.GET("/api/cal", ListCalendars)
-	r.GET("/api/cal/:mixId", func(c *gin.Context) {
-		UID := c.Param("mixId")
-		var params = pkg.ListCalendarParams{
-			CIDArray: []string{UID},
-		}
-		calendars := pkg.ListCalendars(params)
 
-		c.JSON(http.StatusOK, gin.H{
-			"data": calendars,
-		})
-	})
 	return r
 }
