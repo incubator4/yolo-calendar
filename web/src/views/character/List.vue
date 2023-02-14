@@ -3,6 +3,7 @@ import { useCharacterStore } from "@/stores";
 import Avatar from "@/components/icons/Avatar.vue";
 import { useScreen } from "vue-screen";
 import useClipboard from "vue-clipboard3";
+import { useRouter } from "vue-router";
 import {
   Calendar,
   ChatDotRound,
@@ -13,6 +14,7 @@ import {
 const qqGroup = [781289057, 659081677, 374946805, 298018245, 736532313];
 
 const { toClipboard } = useClipboard();
+const router = useRouter();
 
 const onClipboard = (uid: number) => {
   toClipboard("webcal://yolo.incubator4.com/api/ics/" + uid);
@@ -22,6 +24,15 @@ const onClipboard = (uid: number) => {
 const onQQGroup = (group: number) => {
   toClipboard("" + group);
   alert(`粉丝群 ${group} 复制成功`);
+};
+
+const onDetail = (uid: number) => {
+  router.push({
+    name: "VtuberDetail",
+    params: {
+      uid,
+    },
+  });
 };
 
 const size = ref("");
@@ -92,7 +103,10 @@ store.fetchAll();
                       </el-button>
                     </li>
                     <li class="scrollbar-demo-item">
-                      <el-button class="button" :icon="More"
+                      <el-button
+                        class="button"
+                        @click="() => onDetail(uid)"
+                        :icon="More"
                         >更多信息</el-button
                       >
                     </li>

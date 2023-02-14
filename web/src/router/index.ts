@@ -26,7 +26,7 @@ const router = createRouter({
       path: "/vtuber/:uid",
       name: "VtuberDetail",
       props: true,
-      component: () => import("../views/character/UID.vue"),
+      component: () => import("../views/character/Detail.vue"),
     },
   ],
 });

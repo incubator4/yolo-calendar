@@ -12,7 +12,7 @@ const screen = useScreen();
 const loadData = (uid: number) => {
   ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
   store.clearCalendar();
-  store.getCalendar(uid);
+  store.listCalendar({ uid: [uid + ""] });
 };
 
 onMounted(() => {
