@@ -12,7 +12,6 @@ const toggleDark = useToggle(isDark);
 const router = useRouter();
 
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
   router.push(key);
 };
 const routes = [
@@ -23,6 +22,10 @@ const routes = [
   {
     text: "Vtuber",
     path: "/vtuber",
+  },
+  {
+    text: "Record",
+    path: "/record",
   },
   {
     text: "About",

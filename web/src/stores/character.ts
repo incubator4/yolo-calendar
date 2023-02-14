@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import request from "@/tools/axios";
+import qs from "qs";
 
 interface ICharacter {
   id: number;
@@ -40,9 +41,18 @@ export const useCharacterStore = defineStore("character", () => {
     end?: string;
     uid?: Array<string>;
   }) => {
-    return request.get<CharacterCalendar[]>(`/cal`, { params }).then((res) => {
-      calendars.value = res.data;
-    });
+    return request
+      .get<CharacterCalendar[]>(`/cal`, {
+        params,
+        paramsSerializer: {
+          serialize: (params) => {
+            return qs.stringify(params, { arrayFormat: "repeat" });
+          },
+        },
+      })
+      .then((res) => {
+        calendars.value = res.data;
+      });
   };
 
   const clearCalendar = () => {

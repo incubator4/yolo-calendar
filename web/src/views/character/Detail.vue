@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores";
 import { Calendar } from "v-calendar";
+import { useDark } from "@vueuse/core";
 import Dot from "@/components/Dot.vue";
 import { useScreen } from "vue-screen";
 import useClipboard from "vue-clipboard3";
+import Avatar from "@/components/icons/Avatar.vue";
 const props = defineProps({ uid: String });
 
 const store = useCharacterStore();
 const screen = useScreen();
+const isDark = useDark();
 
 const loadData = (uid: number) => {
   ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
   store.clearCalendar();
-  store.listCalendar({ uid: [uid + ""] });
+  store.listCalendar({ uid: [uid.toString()] });
 };
 
 onMounted(() => {
@@ -87,37 +90,42 @@ const onClipboard = () => {
 
 <template>
   <main>
-    <div style="margin-bottom: 5px; max-height: 42px">
-      <a :href="ics" style="margin: 10px">
-        <button class="button">订阅到日历</button>
-      </a>
-      <a @click="onClipboard" style="margin: 10px">
-        <button class="button">复制到剪贴板</button>
-      </a>
-    </div>
-    <Calendar
-      :columns="screen.width > 1024 ? 2 : 1"
-      :rows="screen.height > 600 ? 2 : 1"
-      :attributes="attrs"
-    >
-      <template #day-popover="{ day, format, masks, attributes }">
-        <div>{{ format(day.date, masks.dayPopover) }}</div>
-        <div>
-          <div
-            v-for="attr in attributes"
-            :hideIndicator="true"
-            :key="attr.key"
-            :attribute="attr"
+    <div style="padding: 40px">
+      <el-row>
+        <el-col style="flex: 0 1 400px">
+          <Avatar :uid="+(uid  as  string)" />
+          <el-skeleton :row="10"> </el-skeleton>
+        </el-col>
+        <el-col :span="2"> </el-col>
+        <el-col style="flex: auto">
+          <Calendar
+            :columns="1"
+            :rows="1"
+            :is-dark="isDark"
+            :attributes="attrs"
           >
-            <Dot
-              style="width: 16px; height: 16px"
-              :color="attr.customData.color"
-            />
-            {{ zeroPad(attr.customData.time, 2) }} - {{ attr.customData.title }}
-          </div>
-        </div>
-      </template>
-    </Calendar>
+            <template #day-popover="{ day, format, masks, attributes }">
+              <div>{{ format(day.date, masks.dayPopover) }}</div>
+              <div>
+                <div
+                  v-for="attr in attributes"
+                  :hideIndicator="true"
+                  :key="attr.key"
+                  :attribute="attr"
+                >
+                  <Dot
+                    style="width: 16px; height: 16px"
+                    :color="attr.customData.color"
+                  />
+                  {{ zeroPad(attr.customData.time, 2) }} -
+                  {{ attr.customData.title }}
+                </div>
+              </div>
+            </template>
+          </Calendar>
+        </el-col>
+      </el-row>
+    </div>
   </main>
 </template>
 
