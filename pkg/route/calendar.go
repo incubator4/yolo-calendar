@@ -34,7 +34,7 @@ func getStartAndEndOfDate(c *gin.Context) (types.TimeRange, error) {
 	var err error
 
 	if startStr == "" && endStr == "" {
-		return getCurrentWeekTimeRange(), nil
+		return types.TimeRange{}, nil
 	}
 
 	if startStr != "" && endStr != "" {
@@ -68,15 +68,4 @@ func getStartAndEndOfDate(c *gin.Context) (types.TimeRange, error) {
 		}
 	}
 	return types.TimeRange{Start: start.Add(-8 * time.Hour), End: end.Add(-8 * time.Hour)}, nil
-}
-
-func getCurrentWeekTimeRange() types.TimeRange {
-	now := time.Now()
-	weekday := int(now.Weekday())
-	if weekday == 0 {
-		weekday = 7
-	}
-	start := now.AddDate(0, 0, 1-weekday)
-	end := start.AddDate(0, 0, 7)
-	return types.TimeRange{start, end}
 }
