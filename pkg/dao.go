@@ -57,6 +57,6 @@ func GetCharacter(_c Character) *Character {
 
 func ListCharacter() []Character {
 	var characters []Character
-	DB.Table("character").Find(&characters)
+	DB.Table("character").Order("id").Find(&characters)
 	return characters
 }

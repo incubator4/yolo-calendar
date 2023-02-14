@@ -5,7 +5,7 @@ metadata:
   labels:
     app: yolo-calendar-web
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       name: yolo-calendar-web
