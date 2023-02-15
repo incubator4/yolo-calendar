@@ -60,7 +60,7 @@ const routes = [
             >
           </el-menu>
         </el-col>
-        <el-col style="flex: 1 0 100px">
+        <el-col style="flex: 0 0 100px">
           <div class="right-menubar">
             <el-switch
               @change="toggleDark"
