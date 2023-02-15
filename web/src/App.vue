@@ -82,7 +82,7 @@ const routes = [
       <div class="mask" />
       <div class="title">
         <p class="main">YOLO</p>
-        <p class="secondary">you only live once</p>
+        <p class="secondary">YOU ONLY LIVE ONCE</p>
       </div>
     </div>
 
@@ -187,6 +187,7 @@ nav a:first-of-type {
     overflow: hidden;
     // overflow: hidden;
     .title {
+      font-family: "Times New Roman";
       position: absolute;
       width: 40%;
       height: 40%;
@@ -201,6 +202,9 @@ nav a:first-of-type {
         margin-left: -40px;
       }
       .secondary {
+        text-align: center;
+        color: #fdd911;
+        margin-left: -10px;
         margin-top: -30px;
         font-size: 18px;
       }
@@ -210,7 +214,7 @@ nav a:first-of-type {
         }
         .secondary {
           margin-top: -30px;
-          font-size: 28px;
+          font-size: 24px;
         }
       }
       @media (min-width: 1920px) {
