@@ -39,7 +39,13 @@ const routes = [
     <header class="header">
       <el-row>
         <el-col style="flex: auto" class="logo"></el-col>
-        <el-col style="flex: 1 1 auto; text-align: center">
+        <el-col
+          style="
+            flex: 1 1 auto;
+            text-align: center;
+            max-width: calc(100vw - 120px);
+          "
+        >
           <el-menu
             :default-active="$route.path"
             class="el-menu-demo"
@@ -54,7 +60,7 @@ const routes = [
             >
           </el-menu>
         </el-col>
-        <el-col style="flex: 0 0 100px">
+        <el-col style="flex: 1 0 100px">
           <div class="right-menubar">
             <el-switch
               @change="toggleDark"
