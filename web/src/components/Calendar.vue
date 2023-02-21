@@ -3,8 +3,11 @@ import { useCharacterStore } from "@/stores";
 import moment from "moment";
 import { groupBy } from "lodash";
 import Avatar from "./icons/Avatar.vue";
+import Calendar from "./Calendar/index.vue";
+import { useScreen } from "vue-screen";
 
 const store = useCharacterStore();
+const screen = useScreen();
 
 const getUID = (cid: number) =>
   (store.characters.find((c) => c.id === cid) || { uid: 0 }).uid;
@@ -22,10 +25,14 @@ const currentWeekRange = computed(() => {
 
 const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 
-store.fetchAll();
+store.fetchAll().then(() => {
+  checkAll.value = true;
+  isIndeterminate.value = false;
+  handleCheckAllChange(true);
+});
 
 store.listCalendar({
-  start: moment(startOfWeek).format("yyyy-MM-DD"),
+  // start: moment(startOfWeek).format("yyyy-MM-DD"),
   end: moment(endofWeek).add(1, "days").format("yyyy-MM-DD"),
 });
 
@@ -71,10 +78,6 @@ const matchWeek = (index: number) => {
   }
 };
 
-const Icon = (uid: number) => {
-  <Avatar uid={uid}></Avatar>;
-};
-
 const checkboxVtubers = ref<Array<number>>([]);
 
 const checkAll = ref(false);
@@ -94,7 +97,7 @@ const handleCheckedVtubersChange = (value: string[]) => {
 
 <template>
   <div class="wrapper">
-    <div class="check-wrapper" hidden>
+    <div class="check-wrapper">
       <el-checkbox
         v-model="checkAll"
         :indeterminate="isIndeterminate"
@@ -106,65 +109,33 @@ const handleCheckedVtubersChange = (value: string[]) => {
         @change="handleCheckedVtubersChange"
         size="large"
       >
-        <el-checkbox-button
-          v-for="c in store.characters"
-          :key="c.id"
-          :label="c.id"
-        >
-          <Avatar style="width: 20px; height: 20px" :uid="c.uid" />
-          <p>{{ c.name }}</p>
-        </el-checkbox-button>
+        <template v-if="screen.width > 440">
+          <el-checkbox-button
+            v-for="c in store.characters"
+            :key="c.id"
+            :label="c.id"
+          >
+            <Avatar style="width: 30px; height: 30px" :uid="c.uid" />
+          </el-checkbox-button>
+        </template>
+        <template v-else>
+          <el-checkbox v-for="c in store.characters" :key="c.id" :label="c.id">
+            {{ c.name }}
+          </el-checkbox>
+        </template>
       </el-checkbox-group>
     </div>
-    <el-skeleton v-if="false" :rows="5" />
-    <el-carousel
-      class="carousel"
-      :interval="4000"
-      :initial-index="currentDay === 0 ? 6 : currentDay - 1"
-      indicator-position="none"
-      :autoplay="false"
-      :loop="false"
-      type="card"
-      height="600px"
-    >
-      <el-carousel-item v-for="item in 7" :key="item">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span
-                :style="{
-                  fontWeight: currentDay === item ? 'bolder' : 'normal',
-                }"
-                >{{ currentWeekRange[item - 1].format("yyyy-MM-DD") }}
-                {{ matchWeek(item) }}
-              </span>
-            </div>
-          </template>
-          <el-timeline>
-            <el-timeline-item
-              v-for="(event, index) in currentWeekCal[item]"
-              :key="index"
-              :color="event.main_color"
-              :icon="Icon(event.uid)"
-              :timestamp="new Date(event.start_time).getHours() + '点'"
-            >
-              <el-link
-                :style="{ marginTop: '-8px' }"
-                target="_blank"
-                :href="`https://live.bilibili.com/${event.live_id}`"
-                >{{ event.title }}</el-link
-              >
-            </el-timeline-item>
-          </el-timeline>
-        </el-card>
-      </el-carousel-item>
-    </el-carousel>
+    <Calendar
+      :calendars="
+        store.calendars.filter((cal) => checkboxVtubers.includes(cal.cid))
+      "
+    />
   </div>
 </template>
 
 <style scoped>
 .wrapper {
-  margin-top: 10px;
+  margin: 10px;
 }
 
 .check-wrapper {

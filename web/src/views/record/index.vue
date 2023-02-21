@@ -42,7 +42,7 @@ const date = ref(new Date());
   </el-calendar>
 </template>
 
-<style>
+<style scoped>
 .el-calendar-day {
   height: 2400px;
 }
