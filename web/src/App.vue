@@ -32,6 +32,8 @@ const routes = [
     path: "/about",
   },
 ];
+
+// todo 添加 COS API 自动检测 banners 文件名
 </script>
 
 <template>
@@ -75,10 +77,15 @@ const routes = [
     </header>
 
     <div class="background-container">
-      <img
-        class="background-image"
-        src="https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/assets/background.webp"
-      />
+      <el-carousel height="100vh" :interval="5000" arrow="always">
+        <el-carousel-item v-for="item in 4" :key="item">
+          <img
+            class="background-image"
+            :src="`https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/banners/${item}.webp`"
+          />
+        </el-carousel-item>
+      </el-carousel>
+
       <div class="mask" />
       <div class="title">
         <p class="main">YOLO</p>
