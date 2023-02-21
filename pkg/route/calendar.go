@@ -4,10 +4,18 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/incubator4/yolo-calendar/pkg"
+	"github.com/incubator4/yolo-calendar/pkg/dao"
 	"github.com/incubator4/yolo-calendar/pkg/types"
 	"net/http"
 	"time"
 )
+
+func registerCalendars(g *gin.RouterGroup) {
+	g.GET("", ListCalendars)
+	g.POST("")
+	g.GET("/:id", ValidateCalendarID, GetCalendars)
+	g.PUT("/:id", ValidateCalendarID, UpdateCalendar)
+}
 
 func ListCalendars(c *gin.Context) {
 	timeRange, err := getStartAndEndOfDate(c)
@@ -18,10 +26,32 @@ func ListCalendars(c *gin.Context) {
 			"error": err.Error(),
 		})
 	} else {
-		calendars := pkg.ListCalendars(pkg.ListCalendarParams{UIDArray: uids, CIDArray: cids, TimeRange: timeRange})
+		calendars := dao.ListCalendars(dao.ListCalendarParams{UIDArray: uids, CIDArray: cids, TimeRange: timeRange})
 		c.JSON(http.StatusOK, gin.H{
 			"data": calendars,
 		})
+	}
+
+}
+
+func GetCalendars(c *gin.Context) {
+	id := c.MustGet("id").(int)
+	calendar := dao.GetCalendar(id)
+	c.JSON(http.StatusOK, calendar)
+}
+
+func UpdateCalendar(c *gin.Context) {
+	id := c.MustGet("id").(int)
+	var calendar pkg.Calendar
+	if err := c.ShouldBindJSON(&calendar); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": fmt.Sprintf("Calendar %d not found, err: %s", id, err),
+		})
+	} else {
+		calendar.ID = id
+		fmt.Println(calendar)
+		cal := dao.UpdateCalendar(calendar)
+		c.JSON(http.StatusOK, cal)
 	}
 
 }

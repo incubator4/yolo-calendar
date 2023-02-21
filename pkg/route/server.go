@@ -4,40 +4,31 @@ import (
 	"fmt"
 	ics "github.com/arran4/golang-ical"
 	"github.com/gin-gonic/gin"
-	"github.com/incubator4/yolo-calendar/pkg"
+	"github.com/incubator4/yolo-calendar/pkg/dao"
 	"net/http"
-	"strconv"
 )
 
 func NewServer() *gin.Engine {
 	r := gin.Default()
-	r.GET("/api/characters", func(c *gin.Context) {
+	api := r.Group("/api")
+	{
+		cal := api.Group("/cal")
+		registerCalendars(cal)
+	}
 
-		characters := pkg.ListCharacter()
-		c.JSON(http.StatusOK, gin.H{
-			"data": characters,
-		})
-	})
-	r.GET("/api/characters/:uid", func(c *gin.Context) {
-		stringUID := c.Param("uid")
-		uid, err := strconv.Atoi(stringUID)
-		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"error": err,
-			})
-			return
-		}
-		character := pkg.GetCharacter(pkg.Character{UID: uid})
-		c.JSON(http.StatusOK, gin.H{
-			"data": character,
-		})
-	})
+	{
+		vtuber := api.Group("/vtubers")
+		characters := api.Group("/characters")
+		registerVtubers(vtuber)
+		registerVtubers(characters)
+	}
+
 	r.GET("/api/ics/:uid", func(c *gin.Context) {
 		UID := c.Param("uid")
-		var params = pkg.ListCalendarParams{
+		var params = dao.ListCalendarParams{
 			UIDArray: []string{UID},
 		}
-		calendars := pkg.ListCalendars(params)
+		calendars := dao.ListCalendars(params)
 
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)
@@ -53,7 +44,6 @@ func NewServer() *gin.Engine {
 		}
 		c.String(http.StatusOK, cal.Serialize())
 	})
-	r.GET("/api/cal", ListCalendars)
 
 	return r
 }
