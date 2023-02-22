@@ -31,11 +31,11 @@ export default defineConfig({
         //   var: "ElementPlus",
         //   path: "dist/index.full.min.js",
         // },
-        {
-          name: "moment",
-          var: "Moment",
-          path: "min/moment.min.js",
-        },
+        // {
+        //   name: "moment",
+        //   var: "Moment",
+        //   path: "min/moment.min.js",
+        // },
       ],
       prodUrl: "//unpkg.com/{name}@{version}/{path}",
       // prodUrl: "//cdn.bootcdn.net/ajax/libs/{name}/{version}/{path}",
