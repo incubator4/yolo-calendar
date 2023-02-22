@@ -38,11 +38,11 @@ export default defineConfig({
           var: "ElementPlus",
           path: "dist/index.full.min.js",
         },
-        {
-          name: "vue-router",
-          var: "VueRouter",
-          path: "dist/vue-router.global.prod.js",
-        },
+        // {
+        //   name: "vue-router",
+        //   var: "VueRouter",
+        //   path: "dist/vue-router.global.prod.js",
+        // },
         {
           name: "moment",
           var: "Moment",
