@@ -98,6 +98,7 @@ const handleCheckedVtubersChange = (value: string[]) => {
 <template>
   <div class="wrapper">
     <div class="check-wrapper">
+      <!--
       <el-checkbox
         v-model="checkAll"
         :indeterminate="isIndeterminate"
@@ -124,6 +125,31 @@ const handleCheckedVtubersChange = (value: string[]) => {
           </el-checkbox>
         </template>
       </el-checkbox-group>
+
+    -->
+      <el-select
+        style="width: 100%"
+        v-model="checkboxVtubers"
+        multiple
+        placeholder="Select"
+      >
+        <el-option
+          v-for="c in store.characters"
+          :key="c.id"
+          :label="c.name"
+          :value="c.id"
+        >
+          <span style="float: left">{{ c.name }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ c.uid }}</span
+          >
+        </el-option>
+      </el-select>
     </div>
     <Calendar
       :calendars="
@@ -139,7 +165,8 @@ const handleCheckedVtubersChange = (value: string[]) => {
 }
 
 .check-wrapper {
-  margin: 5px;
+  /* margin: 5px; */
+  margin-bottom: 5px;
 }
 .carousel {
   margin-top: 40px;

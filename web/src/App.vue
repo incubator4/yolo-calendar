@@ -11,6 +11,10 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const router = useRouter();
 
+const backgroundHeight = computed(() => {
+  return screen.height > screen.width ? "60vh" : "100vh";
+});
+
 const handleSelect = (key: string, keyPath: string[]) => {
   router.push(key);
 };
@@ -76,7 +80,7 @@ const routes = [
       </el-row>
     </header>
 
-    <div class="background-container">
+    <div class="background-container" :style="{ height: backgroundHeight }">
       <el-carousel height="100vh" :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
           <img
