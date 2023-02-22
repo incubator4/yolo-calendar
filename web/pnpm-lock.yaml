@@ -33,6 +33,7 @@ specifiers:
   postcss-import: ^15.1.0
   prettier: ^2.7.1
   qs: ^6.11.0
+  rollup-plugin-commonjs: ^10.1.0
   tailwindcss: ^3.2.4
   typescript: ~4.7.4
   unplugin-auto-import: ^0.12.1
@@ -43,7 +44,6 @@ specifiers:
   vite-plugin-compression: ^0.5.1
   vue: ^3.2.45
   vue-clipboard3: ^2.0.0
-  vue-demi: ^0.13.11
   vue-router: ^4.1.6
   vue-screen: 2.1.0-beta.1
   vue-tsc: ^1.0.12
@@ -71,7 +71,6 @@ dependencies:
   v-calendar: 3.0.0-alpha.8_vue@3.2.45
   vue: 3.2.45
   vue-clipboard3: 2.0.0
-  vue-demi: 0.13.11_vue@3.2.45
   vue-router: 4.1.6_vue@3.2.45
   vue-screen: 2.1.0-beta.1_vue@3.2.45
 
@@ -90,6 +89,7 @@ devDependencies:
   postcss: 8.4.21
   postcss-import: 15.1.0_postcss@8.4.21
   prettier: 2.8.3
+  rollup-plugin-commonjs: 10.1.0
   typescript: 4.7.4
   unplugin-auto-import: 0.12.1_@vueuse+core@9.12.0
   vite: 4.0.4_dprl76twtlijnqpm3fdjsbkzqm
@@ -2093,6 +2093,10 @@ packages:
     engines: {node: '>=4.0'}
     dev: true
 
+  /estree-walker/0.6.1:
+    resolution: {integrity: sha512-SqmZANLWS0mnatqbSfRP5g8OXZC12Fgg1IwNtLsyHDzJizORW4khDfjPqJZsemPWBB2uqykUah5YpQ6epsqC/w==}
+    dev: true
+
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
@@ -3279,6 +3283,19 @@ packages:
       glob: 7.2.3
     dev: true
 
+  /rollup-plugin-commonjs/10.1.0:
+    resolution: {integrity: sha512-jlXbjZSQg8EIeAAvepNwhJj++qJWNJw1Cl0YnOqKtP5Djx+fFGkp3WRh+W0ASCaFG5w1jhmzDxgu3SJuVxPF4Q==}
+    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-commonjs.
+    peerDependencies:
+      rollup: '>=1.12.0'
+    dependencies:
+      estree-walker: 0.6.1
+      is-reference: 1.2.1
+      magic-string: 0.25.9
+      resolve: 1.22.1
+      rollup-pluginutils: 2.8.2
+    dev: true
+
   /rollup-plugin-external-globals/0.6.1:
     resolution: {integrity: sha512-mlp3KNa5sE4Sp9UUR2rjBrxjG79OyZAh/QC18RHIjM+iYkbBwNXSo8DHRMZWtzJTrH8GxQ+SJvCTN3i14uMXIA==}
     peerDependencies:
@@ -3288,6 +3305,12 @@ packages:
       estree-walker: 2.0.2
       is-reference: 1.2.1
       magic-string: 0.25.9
+    dev: true
+
+  /rollup-pluginutils/2.8.2:
+    resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==}
+    dependencies:
+      estree-walker: 0.6.1
     dev: true
 
   /rollup/3.10.1:

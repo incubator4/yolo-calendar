@@ -7,6 +7,7 @@ import importToCDN, { autoComplete } from "vite-plugin-cdn-import";
 import AutoImport from "unplugin-auto-import/vite";
 import viteCompression from "vite-plugin-compression";
 import { chunkSplitPlugin } from "vite-plugin-chunk-split";
+import commonjs from "rollup-plugin-commonjs";
 
 // import postcssImport from "postcss-import";
 // import tailwindcss from "tailwindcss";
@@ -23,25 +24,13 @@ export default defineConfig({
     viteCompression(),
     importToCDN({
       modules: [
-        autoComplete("vue"),
         autoComplete("axios"),
         autoComplete("lodash"),
-        autoComplete("@vueuse/core"),
-        {
-          name: "vue-demi",
-          var: "VueDemi",
-          path: "lib/index.iife.js",
-        },
-        {
-          name: "vue-router",
-          var: "VueRouter",
-          path: "dist/vue-router.global.prod.js",
-        },
-        {
-          name: "element-plus",
-          var: "ElementPlus",
-          path: "dist/index.full.min.js",
-        },
+        // {
+        //   name: "element-plus",
+        //   var: "ElementPlus",
+        //   path: "dist/index.full.min.js",
+        // },
         {
           name: "moment",
           var: "Moment",
@@ -73,7 +62,8 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ["vue", "element-plus"],
+      // external: ["element-plus"],
+      plugins: [commonjs()],
     },
   },
 });
