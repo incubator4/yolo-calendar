@@ -3,8 +3,9 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-// import importToCDN, { autoComplete } from "vite-plugin-cdn-import";
+import importToCDN, { autoComplete } from "vite-plugin-cdn-import";
 import AutoImport from "unplugin-auto-import/vite";
+import viteCompression from "vite-plugin-compression";
 import { chunkSplitPlugin } from "vite-plugin-chunk-split";
 
 // import postcssImport from "postcss-import";
@@ -19,13 +20,42 @@ export default defineConfig({
       imports: ["vue"],
       dts: "src/auto-import.d.ts",
     }),
-    // importToCDN({
-    //   modules: [
-    //     autoComplete("vue"),
-    //     autoComplete("axios"),
-    //     autoComplete("@vueuse/core"),
-    //   ],
-    // }),
+    viteCompression(),
+    importToCDN({
+      modules: [
+        // {
+        //   name: "vue",
+        //   var: "Vue",
+        //   path: "vue.global.prod.js",
+        // },
+        // {
+        //   name: "axios",
+        //   var: "axios",
+        //   path: "axios.min.js",
+        // },
+        {
+          name: "element-plus",
+          var: "ElementPlus",
+          path: "dist/index.full.min.js",
+        },
+        {
+          name: "vue-router",
+          var: "VueRouter",
+          path: "dist/vue-router.global.prod.js",
+        },
+        {
+          name: "moment",
+          var: "Moment",
+          path: "min/moment.min.js",
+        },
+        autoComplete("vue"),
+        autoComplete("axios"),
+        autoComplete("lodash"),
+        autoComplete("@vueuse/core"),
+      ],
+      prodUrl: "//unpkg.com/{name}@{version}/{path}",
+      // prodUrl: "//cdn.bootcdn.net/ajax/libs/{name}/{version}/{path}",
+    }),
     chunkSplitPlugin(),
   ],
   resolve: {
