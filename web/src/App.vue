@@ -99,31 +99,6 @@ const routes = [
 
     <div class="route-backgroud"><RouterView /></div>
   </div>
-
-  <!--
-  <header>
-    <img
-      alt="Yolo logo"
-      class="logo"
-      src="@/assets/yolo.jpg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You only live once!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/characters">Vtuber</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-    
-  </header>
-
-  <RouterView />
-  -->
 </template>
 
 <style scoped lang="less">
