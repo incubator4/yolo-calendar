@@ -59,6 +59,10 @@ a, .green {
     background: var(--el-bg-color-overlay);
 }
 
+.fc-list-day-cushion .fc-cell-shaded {
+    background: var(--el-bg-color-overlay);
+}
+
 @media (max-width: 500px) {
     h2, .fc .fc-toolbar-title {
         font-size: large;
