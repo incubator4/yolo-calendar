@@ -28,6 +28,11 @@ export default defineConfig({
         autoComplete("lodash"),
         autoComplete("@vueuse/core"),
         {
+          name: "vue-demi",
+          var: "VueDemi",
+          path: "lib/index.iife.js",
+        },
+        {
           name: "vue-router",
           var: "VueRouter",
           path: "dist/vue-router.global.prod.js",
@@ -64,6 +69,11 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [],
+    },
+  },
+  build: {
+    rollupOptions: {
+      external: ["vue", "element-plus"],
     },
   },
 });
