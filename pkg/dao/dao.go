@@ -5,12 +5,9 @@ import (
 	"github.com/incubator4/yolo-calendar/pkg/types"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"time"
 )
 
 var DB *gorm.DB
-
-var Loc *time.Location
 
 func init() {
 	var err error
@@ -26,11 +23,52 @@ func init() {
 		panic(err)
 	}
 
-	Loc, _ = time.LoadLocation("Asia/Shanghai")
 }
 
 type ListCalendarParams struct {
 	CIDArray  []string
 	UIDArray  []string
 	TimeRange types.TimeRange
+}
+
+type Option func(*gorm.DB) *gorm.DB
+
+func WithTimeRange(tr types.TimeRange) Option {
+	return func(db *gorm.DB) *gorm.DB {
+		if tr.Start.IsZero() && tr.End.IsZero() {
+			return db
+		} else if tr.Start.IsZero() {
+			return db.Where("start_time <= ?", tr.End)
+		} else if tr.End.IsZero() {
+			return db.Where("start_time >= ?", tr.Start)
+		} else {
+			return db.Where("start_time >= ? AND start_time <= ?", tr.Start, tr.End)
+		}
+	}
+}
+
+func WithUID(UIDArray []string) Option {
+	return func(db *gorm.DB) *gorm.DB {
+		if UIDArray != nil && len(UIDArray) > 0 {
+			return db.Where("uid IN (?)", UIDArray)
+		} else {
+			return db
+		}
+	}
+}
+
+func WithCID(CIDArray []string) Option {
+	return func(db *gorm.DB) *gorm.DB {
+		if CIDArray != nil && len(CIDArray) > 0 {
+			return db.Where("cid IN (?)", CIDArray)
+		} else {
+			return db
+		}
+	}
+}
+
+func WithOrder(order string) Option {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Order(order)
+	}
 }

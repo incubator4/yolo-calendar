@@ -25,10 +25,8 @@ func NewServer() *gin.Engine {
 
 	r.GET("/api/ics/:uid", func(c *gin.Context) {
 		UID := c.Param("uid")
-		var params = dao.ListCalendarParams{
-			UIDArray: []string{UID},
-		}
-		calendars := dao.ListCalendars(params)
+
+		calendars, _ := dao.ListCalendars(dao.WithUID([]string{UID}), dao.WithOrder("id"))
 
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)

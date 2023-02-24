@@ -2,18 +2,16 @@ package dao
 
 import "github.com/incubator4/yolo-calendar/pkg"
 
-func ListCalendars(params ListCalendarParams) []pkg.CharacterCalendar {
+func ListCalendars(options ...Option) ([]pkg.CharacterCalendar, error) {
 	var calendars []pkg.CharacterCalendar
-	db := params.TimeRange.DB(DB)
-	if len(params.CIDArray) > 0 {
-		db.Where("cid IN (?)", params.CIDArray).Find(&calendars)
-	} else if len(params.UIDArray) > 0 {
-		db.Where("uid IN (?)", params.UIDArray).Find(&calendars)
-	} else {
-		db.Find(&calendars)
+	//db := params.TimeRange.DB(DB)
+	db := DB
+	for _, option := range options {
+		db = option(db)
 	}
+	result := db.Find(&calendars)
 
-	return calendars
+	return calendars, result.Error
 }
 
 func GetCalendar(id int) *pkg.CharacterCalendar {
@@ -23,7 +21,6 @@ func GetCalendar(id int) *pkg.CharacterCalendar {
 }
 
 func UpdateCalendar(cal pkg.Calendar) *pkg.CharacterCalendar {
-
 	DB.Save(&cal)
 	var c = new(pkg.CharacterCalendar)
 	DB.Where("id = ?", cal.ID).First(&c)

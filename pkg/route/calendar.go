@@ -25,12 +25,23 @@ func ListCalendars(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"error": err.Error(),
 		})
-	} else {
-		calendars := dao.ListCalendars(dao.ListCalendarParams{UIDArray: uids, CIDArray: cids, TimeRange: timeRange})
-		c.JSON(http.StatusOK, gin.H{
-			"data": calendars,
-		})
+		return
 	}
+	calendars, err := dao.ListCalendars(
+		dao.WithUID(uids),
+		dao.WithCID(cids),
+		dao.WithTimeRange(timeRange),
+		dao.WithOrder("id"),
+	)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": calendars,
+	})
 
 }
 
