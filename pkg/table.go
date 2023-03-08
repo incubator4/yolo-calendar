@@ -18,6 +18,7 @@ type Character struct {
 	UID       int    `json:"uid" gorm:"column:uid"`
 	LiveID    int    `json:"live_id" gorm:"column:live_id"`
 	MainColor string `json:"main_color" gorm:"column:main_color"`
+	TagID     int    `json:"tag_id" gorm:"column:tag_id"`
 }
 
 type CharacterCalendar struct {
