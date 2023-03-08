@@ -53,7 +53,7 @@ store.fetchAll();
             border: `1px solid ${main_color}`,
           }"
         >
-          <el-col :xs="24" :sm="12" :lg="6" :xl="4">
+          <el-col :xs="24" :sm="12" :lg="6" :xxl="4">
             <el-card style="margin: 10px">
               <el-row>
                 <el-col :span="8">

@@ -19,7 +19,7 @@ const router = createRouter({
     {
       path: "/vtuber",
       name: "Vtuber",
-      component: () => import("../views/character/List.vue"),
+      component: () => import("../views/vtuber/List.vue"),
     },
     {
       path: "/record",
@@ -30,7 +30,7 @@ const router = createRouter({
       path: "/vtuber/:uid",
       name: "VtuberDetail",
       props: true,
-      component: () => import("../views/character/Detail.vue"),
+      component: () => import("../views/vtuber/Detail.vue"),
     },
   ],
 });

@@ -6,6 +6,7 @@ import Dot from "@/components/Dot.vue";
 import { useScreen } from "vue-screen";
 import useClipboard from "vue-clipboard3";
 import Avatar from "@/components/icons/Avatar.vue";
+import EditDialog from "./EditDialog.vue";
 const props = defineProps({ uid: String });
 
 const store = useCharacterStore();
@@ -16,6 +17,7 @@ const loadData = (uid: number) => {
   ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
   store.clearCalendar();
   store.listCalendar({ uid: [uid.toString()] });
+  store.getCharacter(uid);
 };
 
 onMounted(() => {
@@ -86,6 +88,11 @@ const onClipboard = () => {
   toClipboard(ics.value);
   alert("复制成功");
 };
+const dialogVisible = ref(false);
+
+const onEdit = () => {
+  dialogVisible.value = true;
+};
 </script>
 
 <template>
@@ -99,11 +106,18 @@ const onClipboard = () => {
         <el-col :span="2"> </el-col>
         <el-col style="flex: auto">
           <Calendar
+            :is-expanded="screen.width > 960"
             :columns="1"
             :rows="1"
             :is-dark="isDark"
             :attributes="attrs"
           >
+            <template #header-title="{ title }">
+              {{ title }}
+              <el-button @click.stop="onEdit" type="primary"
+                >编辑本周</el-button
+              >
+            </template>
             <template #day-popover="{ day, format, masks, attributes }">
               <div>{{ format(day.date, masks.dayPopover) }}</div>
               <div>
@@ -126,6 +140,7 @@ const onClipboard = () => {
         </el-col>
       </el-row>
     </div>
+    <EditDialog v-model="dialogVisible"></EditDialog>
   </main>
 </template>
 

@@ -7,9 +7,19 @@ export const useCharacterStore = defineStore("character", () => {
 
   const calendars = ref<Array<CharacterCalendar>>([]);
 
+  const curentCharacter = ref<ICharacter>();
+
+  const tags = ref<Array<ITag>>([]);
+
   const fetchAll = () => {
     return request.get<ICharacter[]>("/characters").then((res) => {
       characters.value = res.data;
+    });
+  };
+
+  const getCharacter = (uid: number) => {
+    return request.get<ICharacter>(`/characters/${uid}`).then((res) => {
+      curentCharacter.value = res.data;
     });
   };
 
@@ -38,6 +48,12 @@ export const useCharacterStore = defineStore("character", () => {
       });
   };
 
+  const listTags = () => {
+    return request.get<ITag[]>("/event_tags").then((res) => {
+      tags.value = res.data;
+    });
+  };
+
   const clearCalendar = () => {
     calendars.value = [];
   };
@@ -45,9 +61,13 @@ export const useCharacterStore = defineStore("character", () => {
   return {
     characters,
     calendars,
+    tags,
+    curentCharacter,
     fetchAll,
     getCalendar,
+    getCharacter,
     clearCalendar,
     listCalendar,
+    listTags,
   };
 });

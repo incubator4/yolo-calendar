@@ -98,38 +98,10 @@ const handleCheckedVtubersChange = (value: string[]) => {
 <template>
   <div class="wrapper">
     <div class="check-wrapper">
-      <!--
-      <el-checkbox
-        v-model="checkAll"
-        :indeterminate="isIndeterminate"
-        @change="handleCheckAllChange"
-        >Check all</el-checkbox
-      >
-      <el-checkbox-group
-        v-model="checkboxVtubers"
-        @change="handleCheckedVtubersChange"
-        size="large"
-      >
-        <template v-if="screen.width > 440">
-          <el-checkbox-button
-            v-for="c in store.characters"
-            :key="c.id"
-            :label="c.id"
-          >
-            <Avatar style="width: 30px; height: 30px" :uid="c.uid" />
-          </el-checkbox-button>
-        </template>
-        <template v-else>
-          <el-checkbox v-for="c in store.characters" :key="c.id" :label="c.id">
-            {{ c.name }}
-          </el-checkbox>
-        </template>
-      </el-checkbox-group>
-
-    -->
       <el-select
         style="width: 100%"
         v-model="checkboxVtubers"
+        filterable
         multiple
         placeholder="Select"
       >

@@ -11,6 +11,12 @@ interface ICalendar {
   start_time: Date;
   end_time: Date;
   cid: number;
+  tag_id: number;
+}
+
+interface ITag {
+  id: number;
+  name: string;
 }
 
 type CharacterCalendar = ICalendar & ICharacter;
