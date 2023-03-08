@@ -12,7 +12,7 @@ const toggleDark = useToggle(isDark);
 const router = useRouter();
 
 const backgroundHeight = computed(() => {
-  return screen.height > screen.width ? "60vh" : "100vh";
+  return screen.height > screen.width ? "40vh" : "50vh";
 });
 
 const handleSelect = (key: string, keyPath: string[]) => {
@@ -81,7 +81,7 @@ const routes = [
     </header>
 
     <div class="background-container" :style="{ height: backgroundHeight }">
-      <el-carousel height="100vh" :interval="5000" arrow="always">
+      <el-carousel v-if="false" height="100vh" :interval="5000" arrow="always">
         <el-carousel-item v-for="item in 4" :key="item">
           <img
             class="background-image"
@@ -92,8 +92,8 @@ const routes = [
 
       <div class="mask" />
       <div class="title">
-        <p class="main">YOLO</p>
-        <p class="secondary">YOU ONLY LIVE ONCE</p>
+        <p class="main">Calendar</p>
+        <p class="secondary">vtuber 日程站</p>
       </div>
     </div>
 
@@ -168,12 +168,12 @@ nav a:first-of-type {
   .background-container {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 60vh;
     max-width: 100%;
     overflow: hidden;
     // overflow: hidden;
     .title {
-      font-family: "Times New Roman";
+      font-family: "Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif";
       position: absolute;
       width: 40%;
       height: 40%;
@@ -183,7 +183,7 @@ nav a:first-of-type {
       text-align: center;
       color: white;
       .main {
-        font-size: 96px;
+        font-size: 60px;
         text-align: center;
         margin-left: -40px;
       }
@@ -191,16 +191,25 @@ nav a:first-of-type {
         text-align: center;
         color: #fdd911;
         margin-left: -10px;
-        margin-top: -30px;
+        margin-top: -20px;
         font-size: 18px;
       }
       @media (min-width: 640px) {
         .main {
-          font-size: 144px;
+          font-size: 100px;
         }
         .secondary {
           margin-top: -30px;
           font-size: 24px;
+        }
+      }
+      @media (min-width: 960px) {
+        .main {
+          font-size: 140px;
+        }
+        .secondary {
+          margin-top: -30px;
+          font-size: 40px;
         }
       }
       @media (min-width: 1920px) {
