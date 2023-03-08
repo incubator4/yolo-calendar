@@ -8,6 +8,7 @@ spec:
   dnsNames:
     - yolo.incubator4.com
     - yolo.k3s.incubator4.com
+    - calendar.incubator4.com
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
