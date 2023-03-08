@@ -28,10 +28,19 @@ type CharacterCalendar struct {
 	MainColor string `json:"main_color" gorm:"column:main_color"`
 }
 
+type EventTag struct {
+	ID   int    `json:"id" gorm:"primaryKey;"`
+	Name string `json:"name" gorm:"column:name"`
+}
+
 func (CharacterCalendar) TableName() string {
 	return "character_calendar"
 }
 
 func (Calendar) TableName() string {
 	return "calendar"
+}
+
+func (EventTag) TableName() string {
+	return "event_tag"
 }

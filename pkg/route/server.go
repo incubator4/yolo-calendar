@@ -23,6 +23,11 @@ func NewServer() *gin.Engine {
 		registerVtubers(characters)
 	}
 
+	{
+		eventTags := api.Group("/event_tags")
+		registerEventTag(eventTags)
+	}
+
 	r.GET("/api/ics/:uid", func(c *gin.Context) {
 		UID := c.Param("uid")
 
