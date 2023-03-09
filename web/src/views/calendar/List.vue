@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCharacterStore } from "@/stores";
+import { useCalendarStore } from "@/stores";
 import { groupBy } from "lodash";
 import moment from "moment";
-const store = useCharacterStore();
+const store = useCalendarStore();
 store.listCalendar({
   end: moment().format("yyyy-MM-DD"),
 });
