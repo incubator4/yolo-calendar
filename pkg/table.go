@@ -11,6 +11,7 @@ type Calendar struct {
 	StartTime   time.Time `json:"start_time" gorm:"column:start_time;type:time;<-"`
 	EndTime     time.Time `json:"end_time" gorm:"column:end_time;type:time;<-"`
 	TagID       int       `json:"tag_id" gorm:"column:tag_id;<-"`
+	IsActive    bool      `json:"is_active" gorm:"column:is_active;<-"`
 }
 
 type Character struct {
