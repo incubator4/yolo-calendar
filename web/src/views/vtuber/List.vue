@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCharacterStore } from "@/stores";
+import { useVtuberStore } from "@/stores";
 import Avatar from "@/components/icons/Avatar.vue";
 import { useScreen } from "vue-screen";
 import useClipboard from "vue-clipboard3";
@@ -37,7 +37,7 @@ const onDetail = (uid: number) => {
 
 const size = ref("");
 const screen = useScreen();
-const store = useCharacterStore();
+const store = useVtuberStore();
 store.fetchAll();
 </script>
 <template>
@@ -45,7 +45,7 @@ store.fetchAll();
     <el-scrollbar>
       <el-row>
         <template
-          v-for="{ uid, name, id, live_id, main_color } in store.characters"
+          v-for="{ uid, name, id, live_id, main_color } in store.vtubers"
           :key="id"
           class="scrollbar-demo-item"
           :style="{
@@ -77,7 +77,7 @@ store.fetchAll();
                 </el-col>
                 <el-col :span="16">
                   <ul class="infinite-list" style="overflow: auto">
-                    <li class="scrollbar-demo-item">
+                    <li v-show="false" class="scrollbar-demo-item">
                       <el-button
                         class="button"
                         :icon="ChatDotRound"

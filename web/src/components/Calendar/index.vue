@@ -16,7 +16,7 @@ import { INITIAL_EVENTS, createEventId } from "./event-util";
 
 import "./style.css";
 
-const props = defineProps<{ calendars: Array<CharacterCalendar> }>();
+const props = defineProps<{ calendars: Array<VtuberCalendar> }>();
 
 const fullCalendar = ref();
 const currentEvents = ref<EventApi[]>([]);

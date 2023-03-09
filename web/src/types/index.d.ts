@@ -1,4 +1,4 @@
-interface ICharacter {
+interface IVtuber {
   id: number;
   name: string;
   uid: number;
@@ -21,4 +21,4 @@ interface ITag {
   name: string;
 }
 
-type CharacterCalendar = ICalendar & ICharacter;
+type VtuberCalendar = ICalendar & IVtuber;

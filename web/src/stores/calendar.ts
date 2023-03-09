@@ -2,29 +2,12 @@ import { defineStore } from "pinia";
 import request from "@/tools/axios";
 import qs from "qs";
 
-export const useCharacterStore = defineStore("character", () => {
-  const characters = ref<Array<ICharacter>>([]);
-
-  const calendars = ref<Array<CharacterCalendar>>([]);
-
-  const curentCharacter = ref<ICharacter>();
-
+export const useCalendarStore = defineStore("calendar", () => {
+  const calendars = ref<Array<VtuberCalendar>>([]);
   const tags = ref<Array<ITag>>([]);
 
-  const fetchAll = () => {
-    return request.get<ICharacter[]>("/characters").then((res) => {
-      characters.value = res.data;
-    });
-  };
-
-  const getCharacter = (uid: number) => {
-    return request.get<ICharacter>(`/characters/${uid}`).then((res) => {
-      curentCharacter.value = res.data;
-    });
-  };
-
   const getCalendar = (uid: number) => {
-    return request.get<CharacterCalendar[]>(`/cal/${uid}`).then((res) => {
+    return request.get<VtuberCalendar[]>(`/cal/${uid}`).then((res) => {
       calendars.value = res.data;
     });
   };
@@ -43,7 +26,7 @@ export const useCharacterStore = defineStore("character", () => {
     uid?: Array<string>;
   }) => {
     return request
-      .get<CharacterCalendar[]>(`/cal`, {
+      .get<VtuberCalendar[]>(`/cal`, {
         params,
         paramsSerializer: {
           serialize: (params) => {
@@ -56,6 +39,8 @@ export const useCharacterStore = defineStore("character", () => {
       });
   };
 
+  const deleteCalendar = (id: number) => request.delete(`/cal/${id}`);
+
   const listTags = () => {
     return request.get<ITag[]>("/event_tags").then((res) => {
       tags.value = res.data;
@@ -67,17 +52,14 @@ export const useCharacterStore = defineStore("character", () => {
   };
 
   return {
-    characters,
     calendars,
     tags,
-    curentCharacter,
-    fetchAll,
     getCalendar,
     updateCalendar,
     createCalendar,
-    getCharacter,
     clearCalendar,
     listCalendar,
+    deleteCalendar,
     listTags,
   };
 });

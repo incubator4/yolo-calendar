@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { useCharacterStore } from "@/stores";
+import { useVtuberStore, useCalendarStore } from "@/stores";
 import { useDark } from "@vueuse/core";
 import { useScreen } from "vue-screen";
 import moment from "moment";
 import Avatar from "@/components/icons/Avatar.vue";
 import EditDialog from "./EditDialog.vue";
+import { Hide, View } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
+
 const props = defineProps({ uid: String });
 
-const store = useCharacterStore();
+const vtuberStore = useVtuberStore();
+const calendarStore = useCalendarStore();
 const screen = useScreen();
 const isDark = useDark();
 
 const loadData = (uid: number) => {
   ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
-  store.clearCalendar();
-  store.listCalendar({ uid: [uid.toString()] }).then(() => {
-    state.total = store.calendars.length;
+  calendarStore.clearCalendar();
+  calendarStore.listCalendar({ uid: [uid.toString()] }).then(() => {
+    state.total = calendarStore.calendars.length;
   });
-  store.getCharacter(uid);
-  store.listTags();
+  vtuberStore.getVtuber(uid);
+  calendarStore.listTags();
 };
 
 onMounted(() => {
@@ -45,7 +49,7 @@ const defaultEvent: ICalendar = {
   title: "",
   start_time: moment().toDate(),
   end_time: moment().add(2, "h").toDate(),
-  cid: store.curentCharacter?.id as number,
+  cid: vtuberStore.curentVtuber?.id as number,
   tag_id: 0,
   is_active: true,
 };
@@ -69,6 +73,16 @@ const onNew = () => {
   dialogVisible.value = true;
 };
 
+const onDelete = (id: number) => {
+  calendarStore.deleteCalendar(id).then(() => {
+    ElMessage({
+      message: "删除成功",
+      type: "success",
+    });
+    loadData(+(props.uid as string));
+  });
+};
+
 const state = reactive({
   page: 1,
   limit: 10,
@@ -78,7 +92,7 @@ const state = reactive({
 const isReverse = ref(true);
 
 const tableData = computed(() => {
-  const data = store.calendars
+  const data = calendarStore.calendars
     .sort((a, b) => (a.start_time > b.start_time ? 1 : -1))
     .filter((event, index) => {
       const date = new Date(event.start_time);
@@ -135,18 +149,8 @@ const shortcuts = [
 ];
 
 const tagName = (tag_id: number) => {
-  const tag = store.tags.find((t) => t.id === tag_id);
+  const tag = calendarStore.tags.find((t) => t.id === tag_id);
   return tag ? tag.name : "-";
-};
-
-const tableRowClassName = ({
-  row,
-  rowIndex,
-}: {
-  row: ICalendar;
-  rowIndex: number;
-}) => {
-  return row.is_active ? "" : "waring-row";
 };
 
 const update = () => {
@@ -191,11 +195,13 @@ const update = () => {
         </el-col>
       </el-row>
 
-      <el-table
-        :data="tableData"
-        :row-class-name="tableRowClassName"
-        style="width: 100%"
-      >
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column label="Active" width="70">
+          <template #default="{ row }">
+            <el-icon v-if="row.is_active"><View /></el-icon>
+            <el-icon v-else><Hide /></el-icon>
+          </template>
+        </el-table-column>
         <el-table-column label="Datetime" width="180">
           <el-table-column label="Date" width="120">
             <template #default="{ row }">
@@ -235,7 +241,15 @@ const update = () => {
             >
               编辑</el-button
             >
-            <el-button type="danger">删除</el-button>
+            <el-button
+              type="danger"
+              @click="
+                () => {
+                  onDelete(row.id);
+                }
+              "
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -260,9 +274,5 @@ const update = () => {
   font-size: 14px;
   font-family: "微软雅黑", arail;
   cursor: pointer;
-}
-
-.el-table .warning-row {
-  --el-table-tr-bg-color: var(--el-color-warning-light-9);
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCharacterStore } from "@/stores";
+import { useVtuberStore, useCalendarStore } from "@/stores";
 import moment from "moment";
 import { cloneDeep } from "lodash";
 import { ElMessageBox, ElMessage } from "element-plus";
@@ -7,7 +7,8 @@ import { useScreen } from "vue-screen";
 import type { FormInstance, FormRules } from "element-plus";
 
 const screen = useScreen();
-const store = useCharacterStore();
+const vtuberStore = useVtuberStore();
+const calendarStore = useCalendarStore();
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -75,8 +76,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       const model = editEvent.value;
 
       const result = model.id
-        ? store.updateCalendar(model.id, model)
-        : store.createCalendar(model);
+        ? calendarStore.updateCalendar(model.id, model)
+        : calendarStore.createCalendar(model);
       result.then(() => {
         ElMessage({
           message: model.id ? "更新成功" : "新建成功",
@@ -123,7 +124,7 @@ const colGrid = {
         <el-select style="width: 90%" v-model="editEvent.tag_id" placeholder="">
           <el-option label="暂无" :value="0"></el-option>
           <el-option
-            v-for="tag in store.tags"
+            v-for="tag in calendarStore.tags"
             :label="tag.name"
             :value="tag.id"
           ></el-option>

@@ -1,16 +1,17 @@
 <script setup lang="tsx">
-import { useCharacterStore } from "@/stores";
+import { useVtuberStore, useCalendarStore } from "@/stores";
 import moment from "moment";
 import { groupBy } from "lodash";
 import Avatar from "./icons/Avatar.vue";
 import Calendar from "./Calendar/index.vue";
 import { useScreen } from "vue-screen";
 
-const store = useCharacterStore();
+const vtuberStore = useVtuberStore();
+const calendarStore = useCalendarStore();
 const screen = useScreen();
 
 const getUID = (cid: number) =>
-  (store.characters.find((c) => c.id === cid) || { uid: 0 }).uid;
+  (vtuberStore.vtubers.find((c) => c.id === cid) || { uid: 0 }).uid;
 
 const startOfWeek = moment().startOf("week").toDate();
 const endofWeek = moment().endOf("week").toDate();
@@ -25,20 +26,20 @@ const currentWeekRange = computed(() => {
 
 const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 
-store.fetchAll().then(() => {
+vtuberStore.fetchAll().then(() => {
   checkAll.value = true;
   isIndeterminate.value = false;
   handleCheckAllChange(true);
 });
 
-store.listCalendar({
+calendarStore.listCalendar({
   // start: moment(startOfWeek).format("yyyy-MM-DD"),
   end: moment(endofWeek).add(1, "days").format("yyyy-MM-DD"),
 });
 
 const currentWeekCal = computed(() =>
   groupBy(
-    store.calendars
+    calendarStore.calendars
       // .filter(({ start_time }) => {
       //   const date = new Date(start_time);
       //   return date > startOfWeek && date < endofWeek;
@@ -83,15 +84,15 @@ const checkboxVtubers = ref<Array<number>>([]);
 const checkAll = ref(false);
 const isIndeterminate = ref(true);
 const handleCheckAllChange = (val: boolean) => {
-  checkboxVtubers.value = val ? store.characters.map((c) => c.id) : [];
+  checkboxVtubers.value = val ? vtuberStore.vtubers.map((c) => c.id) : [];
   isIndeterminate.value = false;
 };
 
 const handleCheckedVtubersChange = (value: string[]) => {
   const checkedCount = value.length;
-  checkAll.value = checkedCount === store.characters.length;
+  checkAll.value = checkedCount === vtuberStore.vtubers.length;
   isIndeterminate.value =
-    checkedCount > 0 && checkedCount < store.characters.length;
+    checkedCount > 0 && checkedCount < vtuberStore.vtubers.length;
 };
 </script>
 
@@ -106,7 +107,7 @@ const handleCheckedVtubersChange = (value: string[]) => {
         placeholder="Select"
       >
         <el-option
-          v-for="c in store.characters"
+          v-for="c in vtuberStore.vtubers"
           :key="c.id"
           :label="c.name"
           :value="c.id"
@@ -125,7 +126,9 @@ const handleCheckedVtubersChange = (value: string[]) => {
     </div>
     <Calendar
       :calendars="
-        store.calendars.filter((cal) => checkboxVtubers.includes(cal.cid))
+        calendarStore.calendars.filter((cal) =>
+          checkboxVtubers.includes(cal.cid)
+        )
       "
     />
   </div>
