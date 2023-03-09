@@ -26,3 +26,7 @@ func UpdateCalendar(cal pkg.Calendar) *pkg.CharacterCalendar {
 	DB.Where("id = ?", cal.ID).First(&c)
 	return c
 }
+
+func DeleteCalendar(id int) error {
+	return DB.Table("calendar").Where("id = ?", id).Update("is_delete", true).Error
+}

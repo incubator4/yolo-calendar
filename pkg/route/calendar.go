@@ -15,6 +15,7 @@ func registerCalendars(g *gin.RouterGroup) {
 	g.POST("")
 	g.GET("/:id", ValidateCalendarID, GetCalendars)
 	g.PUT("/:id", ValidateCalendarID, UpdateCalendar)
+	g.DELETE("/:id", ValidateCalendarID, DeleteCalendar)
 }
 
 func ListCalendars(c *gin.Context) {
@@ -65,6 +66,18 @@ func UpdateCalendar(c *gin.Context) {
 		c.JSON(http.StatusOK, cal)
 	}
 
+}
+
+func DeleteCalendar(c *gin.Context) {
+	id := c.MustGet("id").(int)
+	err := dao.DeleteCalendar(id)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": err,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{})
+	}
 }
 
 func getStartAndEndOfDate(c *gin.Context) (types.TimeRange, error) {
