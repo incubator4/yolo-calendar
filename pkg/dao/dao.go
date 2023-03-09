@@ -72,3 +72,15 @@ func WithOrder(order string) Option {
 		return db.Order(order)
 	}
 }
+
+func WithNotDelete() Option {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("is_delete = ?", false)
+	}
+}
+
+func WithActive() Option {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("is_active = ?", true)
+	}
+}

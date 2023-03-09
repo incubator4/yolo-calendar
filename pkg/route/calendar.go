@@ -33,6 +33,7 @@ func ListCalendars(c *gin.Context) {
 		dao.WithCID(cids),
 		dao.WithTimeRange(timeRange),
 		dao.WithOrder("id"),
+		dao.WithActive(),
 	)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
