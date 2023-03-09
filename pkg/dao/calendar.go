@@ -30,7 +30,7 @@ func UpdateCalendar(cal pkg.Calendar) *pkg.CharacterCalendar {
 func CreateCalendar(cal pkg.Calendar) (*pkg.CharacterCalendar, error) {
 	c := cal
 	var err error
-	err = DB.Create(c).Error
+	err = DB.Create(&c).Error
 	if err != nil {
 		return nil, err
 	}

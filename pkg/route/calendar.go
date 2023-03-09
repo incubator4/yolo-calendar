@@ -78,6 +78,8 @@ func CreateCalendar(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(calendar)
+
 	cal, err := dao.CreateCalendar(calendar)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
