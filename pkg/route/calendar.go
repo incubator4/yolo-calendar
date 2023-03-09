@@ -12,7 +12,7 @@ import (
 
 func registerCalendars(g *gin.RouterGroup) {
 	g.GET("", ListCalendars)
-	g.POST("")
+	g.POST("", CreateCalendar)
 	g.GET("/:id", ValidateCalendarID, GetCalendars)
 	g.PUT("/:id", ValidateCalendarID, UpdateCalendar)
 	g.DELETE("/:id", ValidateCalendarID, DeleteCalendar)
@@ -66,6 +66,27 @@ func UpdateCalendar(c *gin.Context) {
 		cal := dao.UpdateCalendar(calendar)
 		c.JSON(http.StatusOK, cal)
 	}
+
+}
+
+func CreateCalendar(c *gin.Context) {
+	var calendar pkg.Calendar
+	if err := c.ShouldBindJSON(&calendar); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": fmt.Sprintf("Err: %s", err),
+		})
+		return
+	}
+
+	cal, err := dao.CreateCalendar(calendar)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": fmt.Sprintf("Err: %s", err),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, cal)
 
 }
 
