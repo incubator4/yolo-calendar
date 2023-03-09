@@ -29,6 +29,14 @@ export const useCharacterStore = defineStore("character", () => {
     });
   };
 
+  const updateCalendar = (id: number, model: ICalendar) => {
+    return request.put(`/cal/${id}`, model);
+  };
+
+  const createCalendar = (model: ICalendar) => {
+    return request.post("/cal", model);
+  };
+
   const listCalendar = (params?: {
     start?: string;
     end?: string;
@@ -65,6 +73,8 @@ export const useCharacterStore = defineStore("character", () => {
     curentCharacter,
     fetchAll,
     getCalendar,
+    updateCalendar,
+    createCalendar,
     getCharacter,
     clearCalendar,
     listCalendar,

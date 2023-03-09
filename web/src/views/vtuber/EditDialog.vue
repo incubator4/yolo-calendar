@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores";
 import moment from "moment";
-import { cloneDeep, pick } from "lodash";
+import { cloneDeep } from "lodash";
+import { ElMessageBox, ElMessage } from "element-plus";
+import { useScreen } from "vue-screen";
+import type { FormInstance, FormRules } from "element-plus";
 
+const screen = useScreen();
 const store = useCharacterStore();
+
+const ruleFormRef = ref<FormInstance>();
 
 const props = defineProps<{
   modelValue: boolean;
+  event: ICalendar;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
-
-const startOfWeek = moment().startOf("week").toDate();
-const endofWeek = moment().endOf("week").toDate();
+const emit = defineEmits(["update:modelValue", "update"]);
 
 const minusHour = (start: Date, end: Date) => {
   const diffTime = end.getTime() - start.getTime();
@@ -28,114 +32,150 @@ const calcValue = computed<boolean>({
   },
 });
 
-const currentWeekCal = computed(() =>
-  store.calendars
-    .filter((event) => {
-      const date = new Date(event.start_time);
-      return date > startOfWeek && date < endofWeek;
-    })
-    .map((event) =>
-      pick(event, [
-        "id",
-        "title",
-        "start_time",
-        "end_time",
-        "title",
-        "cid",
-        "tag_id",
-      ])
-    )
-);
+const editEvent = ref<ICalendar>(props.event);
 
-const editWeekCal = ref<ICalendar[]>([]);
+const rules = reactive<FormRules>({
+  title: [{ required: true, message: "Please input Title", trigger: "blur" }],
+  start_time: [
+    {
+      type: "date",
+      required: true,
+      message: "Please pick a date",
+      trigger: "change",
+    },
+  ],
+});
 
 watch(
   () => props.modelValue,
   (val) => {
     if (val) {
-      store.listTags();
-      editWeekCal.value = cloneDeep(currentWeekCal.value);
+      editEvent.value = props.event;
+      console.log(props.event);
+      // editWeekCal.value = cloneDeep(currentWeekCal.value);
     }
   }
 );
 
-const append = () => {
-  const c = store.curentCharacter;
-  if (c) {
-    editWeekCal.value = [
-      ...editWeekCal.value,
-      {
-        title: "",
-        start_time: new Date(),
-        end_time: moment().add(1, "h").toDate(),
-        tag_id: 0,
-        cid: c.id,
-      },
-    ];
-  }
+const beforeClose = (done: () => void) => {
+  ElMessageBox.confirm("Are you sure you want to close this?")
+    .then(() => {
+      done();
+    })
+    .catch(() => {
+      // catch error
+    });
+};
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  console.log(formEl);
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      const model = editEvent.value;
+
+      const result = model.id
+        ? store.updateCalendar(model.id, model)
+        : store.createCalendar(model);
+      result.then(() => {
+        ElMessage({
+          message: model.id ? "更新成功" : "新建成功",
+          type: "success",
+        });
+        emit("update");
+        handleClose();
+      });
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
 };
 
 const handleClose = () => {
   emit("update:modelValue", false);
 };
+const formSize = ref("default");
+
+const colGrid = {
+  xs: 24,
+  sm: 12,
+};
 </script>
 <template>
-  <el-dialog v-model="calcValue" title="Tips" width="70%">
-    <el-card class="event" v-for="event in editWeekCal">
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="标题">
-            <el-input style="width: 90%" v-model="event.title"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="类型">
-            <el-select v-model="event.tag_id" placeholder="">
-              <el-option label="暂无" :value="0"></el-option>
-              <el-option
-                v-for="tag in store.tags"
-                :label="tag.name"
-                :value="tag.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="时间">
-            <el-date-picker
-              v-model="event.start_time"
-              type="datetime"
-              placeholder="Pick a date"
-              style="width: 90%"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="时长">
-            <el-select
-              :model-value="
-                minusHour(new Date(event.start_time), new Date(event.end_time))
-              "
-              @change="(val: number) => {
-                event.end_time = moment(event.start_time).add(val, 'hour').toDate()
+  <el-dialog
+    v-model="calcValue"
+    :title="event.id ? '修改' : '新增'"
+    :width="screen.width > 768 ? '600px' : '90%'"
+  >
+    <el-form
+      ref="ruleFormRef"
+      :model="editEvent"
+      :rules="rules"
+      label-width="120px"
+      class="demo-ruleForm"
+      :size="formSize"
+      status-icon
+    >
+      <el-form-item label="标题" prop="title">
+        <el-input style="width: 90%" v-model="editEvent.title"></el-input>
+      </el-form-item>
+      <el-form-item label="类型">
+        <el-select style="width: 90%" v-model="editEvent.tag_id" placeholder="">
+          <el-option label="暂无" :value="0"></el-option>
+          <el-option
+            v-for="tag in store.tags"
+            :label="tag.name"
+            :value="tag.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="时间" prop="start_time">
+        <el-date-picker
+          v-model="editEvent.start_time"
+          type="datetime"
+          placeholder="Pick a date"
+          style="width: 90%"
+        />
+      </el-form-item>
+      <el-form-item label="时长">
+        <el-select
+          style="width: 90%"
+          :model-value="
+            minusHour(
+              new Date(editEvent.start_time),
+              new Date(editEvent.end_time)
+            )
+          "
+          @change="(val: number) => {
+                editEvent.end_time = moment(editEvent.start_time).add(val, 'hour').toDate()
               }"
-              placeholder=""
-            >
-              <el-option
-                v-for="item in 8"
-                :label="item + '小时'"
-                :value="item"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-card>
+          placeholder=""
+        >
+          <el-option
+            v-for="item in 8"
+            :label="item + '小时'"
+            :value="item"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="启用" prop="is_active">
+        <el-switch v-model="editEvent.is_active"></el-switch>
+      </el-form-item>
+    </el-form>
+
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="append">新增</el-button>
         <el-button type="danger" @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleClose"> 提交 </el-button>
+        <el-button
+          type="primary"
+          @click="
+            () => {
+              submitForm(ruleFormRef);
+            }
+          "
+        >
+          提交
+        </el-button>
       </span>
     </template>
   </el-dialog>

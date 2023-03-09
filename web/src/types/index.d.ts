@@ -7,11 +7,13 @@ interface ICharacter {
 }
 
 interface ICalendar {
+  id?: number;
   title: string;
   start_time: Date;
   end_time: Date;
   cid: number;
   tag_id: number;
+  is_active: boolean;
 }
 
 interface ITag {

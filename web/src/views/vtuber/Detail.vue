@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores";
-import { Calendar } from "v-calendar";
 import { useDark } from "@vueuse/core";
-import Dot from "@/components/Dot.vue";
 import { useScreen } from "vue-screen";
-import useClipboard from "vue-clipboard3";
+import moment from "moment";
 import Avatar from "@/components/icons/Avatar.vue";
 import EditDialog from "./EditDialog.vue";
 const props = defineProps({ uid: String });
@@ -16,8 +14,11 @@ const isDark = useDark();
 const loadData = (uid: number) => {
   ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
   store.clearCalendar();
-  store.listCalendar({ uid: [uid.toString()] });
+  store.listCalendar({ uid: [uid.toString()] }).then(() => {
+    state.total = store.calendars.length;
+  });
   store.getCharacter(uid);
+  store.listTags();
 };
 
 onMounted(() => {
@@ -37,61 +38,119 @@ watch(
   }
 );
 
-const today = computed(() => {
-  if (store.calendars && store.calendars.length > 0) {
-    return [
-      {
-        key: "today",
-        highlight: {
-          fillMode: "light",
-          style: {
-            backgroundColor: "black",
-          },
-        },
-        dates: new Date(),
-      },
-    ];
-  } else {
-    return [];
-  }
-});
-
-const attrs = computed(() => [
-  ...store.calendars.map((c) => {
-    const dates = new Date(c.start_time);
-    return {
-      key: `${c.start_time} - ${c.title}`,
-      dates,
-      popover: {
-        label: c.title,
-        visibility: "focus",
-      },
-      customData: {
-        title: c.title,
-        time: dates.getHours(),
-        color: c.main_color,
-      },
-      dot: {
-        style: {
-          marginTop: "10px",
-          backgroundColor: c.main_color,
-        },
-      },
-    };
-  }),
-  ...today.value,
-]);
-
 const ics = ref("");
-const { toClipboard } = useClipboard();
-const onClipboard = () => {
-  toClipboard(ics.value);
-  alert("复制成功");
-};
 const dialogVisible = ref(false);
 
-const onEdit = () => {
+const defaultEvent: ICalendar = {
+  title: "",
+  start_time: moment().toDate(),
+  end_time: moment().add(2, "h").toDate(),
+  cid: store.curentCharacter?.id as number,
+  tag_id: 0,
+  is_active: true,
+};
+
+let eventModel = reactive<ICalendar>(defaultEvent);
+
+const onEdit = (event: ICalendar) => {
+  eventModel = {
+    ...event,
+  };
   dialogVisible.value = true;
+};
+
+const onNew = () => {
+  eventModel = {
+    ...defaultEvent,
+  };
+  const d = moment();
+  eventModel.start_time = d.toDate();
+  eventModel.end_time = d.add(2, "h").toDate();
+  dialogVisible.value = true;
+};
+
+const state = reactive({
+  page: 1,
+  limit: 10,
+  total: 0,
+});
+
+const isReverse = ref(true);
+
+const tableData = computed(() => {
+  const data = store.calendars
+    .sort((a, b) => (a.start_time > b.start_time ? 1 : -1))
+    .filter((event, index) => {
+      const date = new Date(event.start_time);
+      const [from, to] = pickDateRange.value;
+      const res = date.getTime() > from.getTime();
+      return res;
+    });
+  return isReverse.value ? data.reverse() : data;
+});
+const size = ref<"default" | "large" | "small">("default");
+
+const pickDateRange = ref<[Date, Date]>([
+  moment().startOf("week").toDate(),
+  moment().endOf("week").toDate(),
+]);
+
+const shortcuts = [
+  {
+    text: "本周",
+    value: () => {
+      return [
+        moment().startOf("week").toDate(),
+        moment().endOf("week").toDate(),
+      ];
+    },
+  },
+  {
+    text: "本月",
+    value: () => {
+      return [
+        moment().startOf("month").toDate(),
+        moment().endOf("month").toDate(),
+      ];
+    },
+  },
+  {
+    text: "本季度",
+    value: () => {
+      return [
+        moment().startOf("quarter").toDate(),
+        moment().endOf("quarter").toDate(),
+      ];
+    },
+  },
+  {
+    text: "本年",
+    value: () => {
+      return [
+        moment().startOf("year").toDate(),
+        moment().endOf("year").toDate(),
+      ];
+    },
+  },
+];
+
+const tagName = (tag_id: number) => {
+  const tag = store.tags.find((t) => t.id === tag_id);
+  return tag ? tag.name : "-";
+};
+
+const tableRowClassName = ({
+  row,
+  rowIndex,
+}: {
+  row: ICalendar;
+  rowIndex: number;
+}) => {
+  return row.is_active ? "" : "waring-row";
+};
+
+const update = () => {
+  console.log("update");
 };
 </script>
 
@@ -101,46 +160,93 @@ const onEdit = () => {
       <el-row>
         <el-col style="flex: 0 1 400px">
           <Avatar :uid="+(uid  as  string)" />
-          <el-skeleton :row="10"> </el-skeleton>
         </el-col>
         <el-col :span="2"> </el-col>
         <el-col style="flex: auto">
-          <Calendar
-            :is-expanded="screen.width > 960"
-            :columns="1"
-            :rows="1"
-            :is-dark="isDark"
-            :attributes="attrs"
-          >
-            <template #header-title="{ title }">
-              {{ title }}
-              <el-button @click.stop="onEdit" type="primary"
-                >编辑本周</el-button
-              >
-            </template>
-            <template #day-popover="{ day, format, masks, attributes }">
-              <div>{{ format(day.date, masks.dayPopover) }}</div>
-              <div>
-                <div
-                  v-for="attr in attributes"
-                  :hideIndicator="true"
-                  :key="attr.key"
-                  :attribute="attr"
-                >
-                  <Dot
-                    style="width: 16px; height: 16px"
-                    :color="attr.customData.color"
-                  />
-                  {{ zeroPad(attr.customData.time, 2) }} -
-                  {{ attr.customData.title }}
-                </div>
-              </div>
-            </template>
-          </Calendar>
+          <el-skeleton style="width: 100%" :row="10"> </el-skeleton
+        ></el-col>
+      </el-row>
+      <el-row style="margin-top: 20px">
+        <el-col :span="6">
+          <el-form-item label="倒序">
+            <el-switch v-model="isReverse"></el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2"></el-col>
+        <el-col :span="12">
+          <el-date-picker
+            v-model="pickDateRange"
+            type="daterange"
+            unlink-panels
+            range-separator="To"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            :shortcuts="shortcuts"
+            :size="size"
+          />
+        </el-col>
+        <el-col :span="2"></el-col>
+        <el-col :span="2">
+          <el-button type="primary" @click="onNew">新增</el-button>
         </el-col>
       </el-row>
+
+      <el-table
+        :data="tableData"
+        :row-class-name="tableRowClassName"
+        style="width: 100%"
+      >
+        <el-table-column label="Datetime" width="180">
+          <el-table-column label="Date" width="120">
+            <template #default="{ row }">
+              {{ moment(row.start_time).format("YYYY-MM-DD") }}
+            </template>
+          </el-table-column>
+          <el-table-column label="Time" width="80">
+            <template #default="{ row }">
+              {{ moment(row.start_time).format("HH:mm") }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Duration" width="100">
+            <template #default="{ row }">
+              {{
+                moment(row.end_time).diff(moment(row.start_time), "hour")
+              }}小时
+            </template>
+          </el-table-column>
+        </el-table-column>
+
+        <el-table-column prop="title" label="Title" />
+        <el-table-column prop="tag_id" label="Tag" width="80">
+          <template #default="{ row }">
+            <el-tag> {{ tagName(row.tag_id) }} </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="Action" width="180">
+          <template #default="{ row }">
+            <el-button
+              type="primary"
+              @click="
+                () => {
+                  onEdit(row);
+                }
+              "
+            >
+              编辑</el-button
+            >
+            <el-button type="danger">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <EditDialog v-model="dialogVisible"></EditDialog>
+    <EditDialog
+      v-model="dialogVisible"
+      :event="eventModel"
+      @update="() => {
+        loadData(+(props.uid as string))
+      }"
+    ></EditDialog>
   </main>
 </template>
 
@@ -154,5 +260,9 @@ const onEdit = () => {
   font-size: 14px;
   font-family: "微软雅黑", arail;
   cursor: pointer;
+}
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
 }
 </style>
