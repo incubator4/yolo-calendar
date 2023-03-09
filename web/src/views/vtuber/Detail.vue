@@ -21,7 +21,9 @@ const loadData = (uid: number) => {
   calendarStore.listCalendar({ uid: [uid.toString()] }).then(() => {
     state.total = calendarStore.calendars.length;
   });
-  vtuberStore.getVtuber(uid);
+  vtuberStore.getVtuber(uid).then(() => {
+    eventModel.cid = vtuberStore.curentVtuber?.id as number;
+  });
   calendarStore.listTags();
 };
 
