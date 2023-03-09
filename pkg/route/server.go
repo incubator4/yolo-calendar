@@ -31,7 +31,7 @@ func NewServer() *gin.Engine {
 	r.GET("/api/ics/:uid", func(c *gin.Context) {
 		UID := c.Param("uid")
 
-		calendars, _ := dao.ListCalendars(dao.WithUID([]string{UID}), dao.WithOrder("id"))
+		calendars, _ := dao.ListCalendars(dao.WithUID([]string{UID}), dao.WithOrder("id"), dao.WithActive())
 
 		cal := ics.NewCalendar()
 		cal.SetMethod(ics.MethodRequest)
