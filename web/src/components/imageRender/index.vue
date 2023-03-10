@@ -2,10 +2,13 @@
 import { groupBy } from "lodash";
 import moment from "moment";
 import { useScreen } from "vue-screen";
+import { useImageRenderConfig } from "@/stores";
 import type konva from "konva";
 const props = defineProps<{ data: ICalendar[] }>();
 const image2 = ref<HTMLImageElement>();
 const screen = useScreen();
+
+const configStore = useImageRenderConfig();
 
 const stage = ref();
 
@@ -43,7 +46,6 @@ const load = () => {
     "https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/calendars/d7d83d42a87ed0ce78306cdc764748fe.jpg";
   image.onload = () => {
     // set image only when it is loaded
-
     const width = image.width;
     const ratio = width / image.width;
     image.width = width;
@@ -75,27 +77,54 @@ const timeFormat = (d: Date) => {
 
 onMounted(() => {
   load();
-  fontSize.value -= 1;
 });
 
-const fontSize = ref(56);
-const fontFamily = ref("灵动指书");
-const fontColor = ref("#E77279");
+let currentConfig = ref<ImageRenderConfig>({
+  name: "",
+  image: {
+    url: "",
+    width: 0,
+    height: 0,
+  },
+  textOffSet: {
+    x: 0,
+    y: 0,
+  },
+  row: {
+    x: 0,
+    y: 0,
+    prefix: "",
+    suffix: "",
+  },
+  col: {
+    x: 0,
+    y: 0,
+    prefix: "",
+    suffix: "",
+  },
+  font: {
+    family: "",
+    size: 0,
+    color: "",
+    style: "",
+    layout: "",
+  },
+});
+
+const currentConfigId = ref();
+
+const configChange = (id: number) => {
+  const config = configStore.configs.find((c) => c.id === id);
+  if (config) {
+    currentConfig.value = { ...config };
+  }
+};
+
 const fontStyle = ref<Array<String>>([]);
 
 const curFontStyle = computed(() => {
   const style = fontStyle.value;
   return style && style.length > 0 ? style.join("   ") : "normal";
-});
-
-const offset = reactive({
-  x: 850,
-  y: 50,
-});
-
-const space = reactive({
-  x: 300,
-  y: 138,
 });
 
 const activeNames = ref(["1"]);
@@ -118,23 +147,61 @@ const onSave = () => {
 <template>
   <el-container>
     <el-header>
-      <el-slider v-model="percent" @change="resize" show-input />
+      <el-row>
+        <el-col :span="6">
+          <el-select
+            v-model="currentConfigId"
+            @change="configChange"
+            placeholder=""
+          >
+            <el-option
+              v-for="config in configStore.configs"
+              :label="config.name"
+              :value="config.id"
+            >
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="0"></el-col>
+        <el-col :span="16">
+          <el-slider v-model="percent" @change="resize" show-input />
+        </el-col>
+      </el-row>
     </el-header>
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="220px">
         <el-collapse v-model="activeNames" @change="handleChange">
           <el-collapse-item title="字体设置" name="1">
             <el-form-item label="字体">
-              <el-select v-model="fontFamily" placeholder="">
+              <el-select v-model="currentConfig.font.family" placeholder="">
                 <el-option label="灵动指书" value="灵动指书" />
               </el-select>
             </el-form-item>
             <el-form-item label="字号">
-              <el-input-number v-model="fontSize" placeholder="" />
+              <el-input-number
+                style="width: 100%"
+                v-model="currentConfig.font.size"
+                placeholder=""
+              />
             </el-form-item>
-            <el-form-item label="颜色">
-              <el-color-picker v-model="fontColor" show-alpha />
-            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="颜色">
+                  <el-color-picker
+                    v-model="currentConfig.font.color"
+                    show-alpha
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item v-show="false" label="方向">
+                  <el-select v-model="currentConfig.font.layout" placeholder="">
+                    <el-option label="横向" value="vertical"></el-option>
+                    <el-option label="纵向" value="horizontal"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-form-item label="样式">
               <el-checkbox-group v-model="fontStyle">
                 <el-checkbox label="italic" />
@@ -142,18 +209,53 @@ const onSave = () => {
               </el-checkbox-group>
             </el-form-item>
           </el-collapse-item>
-          <el-collapse-item title="间距设置" name="2">
+          <el-collapse-item title="偏移设置" name="2">
+            <template #title> 偏移设置 </template>
             <el-form-item label="横向偏移">
-              <el-input-number size="small" v-model="offset.x" placeholder="" />
+              <el-input-number
+                size="small"
+                v-model="currentConfig.textOffSet.x"
+                placeholder=""
+              />
             </el-form-item>
             <el-form-item label="纵向偏移">
-              <el-input-number size="small" v-model="offset.y" placeholder="" />
+              <el-input-number
+                size="small"
+                v-model="currentConfig.textOffSet.y"
+                placeholder=""
+              />
             </el-form-item>
+          </el-collapse-item>
+          <el-collapse-item title="每日间距设置" name="3">
             <el-form-item label="横向间距">
-              <el-input-number size="small" v-model="space.x" placeholder="" />
+              <el-input-number
+                size="small"
+                v-model="currentConfig.row.x"
+                placeholder=""
+              />
             </el-form-item>
             <el-form-item label="纵向间距">
-              <el-input-number size="small" v-model="space.y" placeholder="" />
+              <el-input-number
+                size="small"
+                v-model="currentConfig.row.y"
+                placeholder=""
+              />
+            </el-form-item>
+          </el-collapse-item>
+          <el-collapse-item title="事件间距设置" name="4">
+            <el-form-item label="横向间距">
+              <el-input-number
+                size="small"
+                v-model="currentConfig.col.x"
+                placeholder=""
+              />
+            </el-form-item>
+            <el-form-item label="纵向间距">
+              <el-input-number
+                size="small"
+                v-model="currentConfig.col.y"
+                placeholder=""
+              />
             </el-form-item>
           </el-collapse-item>
         </el-collapse>
@@ -170,24 +272,24 @@ const onSave = () => {
                 }"
               />
             </v-layer>
-            <v-layer :config="{ ...offset }">
+            <v-layer :config="{ ...currentConfig.textOffSet }">
               <v-group
                 v-for="(dayCal, index) in computedData"
                 :config="{
-                  x: 0,
-                  y: space.y * +index,
+                  x: currentConfig.row.x * +index,
+                  y: currentConfig.row.y * +index,
                 }"
               >
                 <v-text
                   v-for="(cal, i) in computedData[index]"
                   :config="{
                     text: timeFormat(cal.start_time) + cal.title,
-                    fontSize,
-                    fontFamily,
+                    fontSize: currentConfig.font.size,
+                    fontFamily: currentConfig.font.family,
                     fontStyle: curFontStyle,
-                    fill: fontColor,
-                    x: space.x * i,
-                    y: 0,
+                    fill: currentConfig.font.color,
+                    x: currentConfig.col.x * i,
+                    y: currentConfig.col.y * i,
                   }"
                 ></v-text>
               </v-group>
@@ -202,24 +304,24 @@ const onSave = () => {
                 }"
               />
             </v-layer>
-            <v-layer :config="{ ...offset }">
+            <v-layer :config="{ ...currentConfig.textOffSet }">
               <v-group
                 v-for="(dayCal, index) in computedData"
                 :config="{
-                  x: 0,
-                  y: space.y * +index,
+                  x: currentConfig.row.x * +index,
+                  y: currentConfig.row.y * +index,
                 }"
               >
                 <v-text
                   v-for="(cal, i) in computedData[index]"
                   :config="{
                     text: timeFormat(cal.start_time) + cal.title,
-                    fontSize,
-                    fontFamily,
+                    fontSize: currentConfig.font.size,
+                    fontFamily: currentConfig.font.family,
                     fontStyle: curFontStyle,
-                    fill: fontColor,
-                    x: space.x * i,
-                    y: 0,
+                    fill: currentConfig.font.color,
+                    x: currentConfig.col.x * i,
+                    y: currentConfig.col.y * i,
                   }"
                 ></v-text>
               </v-group>
@@ -230,3 +332,9 @@ const onSave = () => {
     </el-container>
   </el-container>
 </template>
+
+<style scoped>
+.title-tooltip {
+  width: 110px;
+}
+</style>

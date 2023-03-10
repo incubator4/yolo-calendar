@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { useVtuberStore, useCalendarStore } from "@/stores";
+import {
+  useVtuberStore,
+  useCalendarStore,
+  useImageRenderConfig,
+} from "@/stores";
 import { useDark } from "@vueuse/core";
 import { useScreen } from "vue-screen";
 import moment from "moment";
@@ -13,6 +17,7 @@ const props = defineProps({ uid: String });
 
 const vtuberStore = useVtuberStore();
 const calendarStore = useCalendarStore();
+const configStore = useImageRenderConfig();
 const screen = useScreen();
 const isDark = useDark();
 
@@ -23,7 +28,9 @@ const loadData = (uid: number) => {
     state.total = calendarStore.calendars.length;
   });
   vtuberStore.getVtuber(uid).then(() => {
-    eventModel.cid = vtuberStore.curentVtuber?.id as number;
+    const id = vtuberStore.curentVtuber?.id as number;
+    eventModel.cid = id;
+    configStore.list(id);
   });
   calendarStore.listTags();
 };

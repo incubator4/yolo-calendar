@@ -21,4 +21,38 @@ interface ITag {
   name: string;
 }
 
+interface ImageConfig {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface OffSet {
+  x: number;
+  y: number;
+}
+
+interface OffSetConfig extends OffSet {
+  prefix: string;
+  suffix: string;
+}
+
+interface FontConfig {
+  family: string;
+  size: number;
+  color: string;
+  layout: string;
+  style: string;
+}
+
+interface ImageRenderConfig {
+  id?: number;
+  name: string;
+  image: ImageConfig;
+  textOffSet: OffSet;
+  row: OffSetConfig;
+  col: OffSetConfig;
+  font: FontConfig;
+}
+
 type VtuberCalendar = ICalendar & IVtuber;
