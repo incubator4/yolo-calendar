@@ -7,6 +7,7 @@ import Avatar from "@/components/icons/Avatar.vue";
 import EditDialog from "./EditDialog.vue";
 import { Hide, View } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import ImageRender from "@/components/imageRender/index.vue";
 
 const props = defineProps({ uid: String });
 
@@ -104,6 +105,9 @@ const tableData = computed(() => {
     });
   return isReverse.value ? data.reverse() : data;
 });
+
+const tableDataReverse = computed(() => tableData.value.reverse());
+
 const size = ref<"default" | "large" | "small">("default");
 
 const pickDateRange = ref<[Date, Date]>([
@@ -155,8 +159,9 @@ const tagName = (tag_id: number) => {
   return tag ? tag.name : "-";
 };
 
-const update = () => {
-  console.log("update");
+const renderPanel = ref(false);
+const onRender = () => {
+  renderPanel.value = true;
 };
 </script>
 
@@ -173,13 +178,13 @@ const update = () => {
         ></el-col>
       </el-row>
       <el-row style="margin-top: 20px">
-        <el-col :span="6">
+        <el-col :span="2">
           <el-form-item label="倒序">
             <el-switch v-model="isReverse"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="2"></el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-date-picker
             v-model="pickDateRange"
             type="daterange"
@@ -191,9 +196,10 @@ const update = () => {
             :size="size"
           />
         </el-col>
-        <el-col :span="2"></el-col>
-        <el-col :span="2">
+        <el-col :span="4"></el-col>
+        <el-col :span="4">
           <el-button type="primary" @click="onNew">新增</el-button>
+          <el-button @click="onRender">渲染</el-button>
         </el-col>
       </el-row>
 
@@ -262,7 +268,16 @@ const update = () => {
       @update="() => {
         loadData(+(props.uid as string))
       }"
-    ></EditDialog>
+    >
+    </EditDialog>
+    <el-dialog
+      v-if="renderPanel"
+      title="预览"
+      width="90%"
+      v-model="renderPanel"
+    >
+      <ImageRender :data="tableDataReverse" />
+    </el-dialog>
   </main>
 </template>
 
