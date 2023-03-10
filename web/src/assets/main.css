@@ -1,11 +1,11 @@
-@import './base.css';
+@import "./base.css";
 
 #app {
   /* max-width: 1280px; */
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-x:hidden;
+  overflow-x: hidden;
   font-weight: normal;
 }
 

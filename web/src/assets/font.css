@@ -1,6 +1,6 @@
 @font-face {
   font-family: "灵动指书";
-  src: url("/src/assets/fonts/灵动指书手机字体.ttf");
+  src: url("https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/fonts/灵动指书手机字体.ttf");
   /* 用于设置当前字体是否为粗体 */
   font-weight: normal;
   /* 用于设置当前字体的风格 */

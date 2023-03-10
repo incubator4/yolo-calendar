@@ -44,11 +44,11 @@ export default defineConfig({
     VitePluginFonts({
       custom: {
         families: [
-          {
-            name: "灵动指书",
-            local: "灵动指书",
-            src: "./src/assets/fonts/灵动指书手机字体.ttf",
-          },
+          // {
+          //   name: "灵动指书",
+          //   local: "灵动指书",
+          //   src: "https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/fonts/灵动指书手机字体.ttf",
+          // },
         ],
       },
     }),
