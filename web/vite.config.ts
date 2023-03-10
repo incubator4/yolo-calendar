@@ -8,6 +8,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import viteCompression from "vite-plugin-compression";
 import { chunkSplitPlugin } from "vite-plugin-chunk-split";
 import commonjs from "rollup-plugin-commonjs";
+import { VitePluginFonts } from "vite-plugin-fonts";
 
 // import postcssImport from "postcss-import";
 // import tailwindcss from "tailwindcss";
@@ -39,6 +40,17 @@ export default defineConfig({
       ],
       prodUrl: "//unpkg.com/{name}@{version}/{path}",
       // prodUrl: "//cdn.bootcdn.net/ajax/libs/{name}/{version}/{path}",
+    }),
+    VitePluginFonts({
+      custom: {
+        families: [
+          {
+            name: "灵动指书",
+            local: "灵动指书",
+            src: "./src/assets/fonts/灵动指书手机字体.ttf",
+          },
+        ],
+      },
     }),
     chunkSplitPlugin(),
   ],

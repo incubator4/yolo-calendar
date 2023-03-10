@@ -43,6 +43,7 @@ specifiers:
   vite-plugin-cdn-import: ^0.3.5
   vite-plugin-chunk-split: ^0.4.7
   vite-plugin-compression: ^0.5.1
+  vite-plugin-fonts: ^0.7.0
   vue: ^3.2.45
   vue-clipboard3: ^2.0.0
   vue-konva: ^3.0.2
@@ -100,6 +101,7 @@ devDependencies:
   vite-plugin-cdn-import: 0.3.5
   vite-plugin-chunk-split: 0.4.7_vite@4.0.4
   vite-plugin-compression: 0.5.1_vite@4.0.4
+  vite-plugin-fonts: 0.7.0_vite@4.0.4
   vue-tsc: 1.0.24_typescript@4.7.4
 
 packages:
@@ -3773,6 +3775,15 @@ packages:
       vite: 4.0.4_dprl76twtlijnqpm3fdjsbkzqm
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /vite-plugin-fonts/0.7.0_vite@4.0.4:
+    resolution: {integrity: sha512-fisKirkQrA2RFwcyI96SENLu1FyRYNIiC/l5DGdD8oV3OsAWGrYKs0e7/VZF6l0rm0QiYA2sOVTzYfrLAzP9cw==}
+    peerDependencies:
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0
+    dependencies:
+      fast-glob: 3.2.12
+      vite: 4.0.4_dprl76twtlijnqpm3fdjsbkzqm
     dev: true
 
   /vite-plugin-i18n-resources/1.0.3:

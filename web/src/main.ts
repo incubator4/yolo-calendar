@@ -11,7 +11,8 @@ import "element-plus/dist/index.css";
 import "element-plus/theme-chalk/dark/css-vars.css";
 
 import "./assets/main.css";
-import "./assets/font.css";
+// import "./assets/font.css";
+import "virtual:fonts.css";
 import "v-calendar/dist/style.css";
 
 import moment from "moment";
