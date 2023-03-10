@@ -26,7 +26,8 @@ type FontConfig struct {
 }
 
 type ImageRenderConfig struct {
-	ID          uint `json:"id" gorm:"primaryKey"`
+	ID          uint   `json:"id" gorm:"primaryKey"`
+	Name        string `json:"name" gorm:"column:name"`
 	ImageConfig `json:"image" gorm:"embedded;embeddedPrefix:image_"`
 	TextOffSet  OffSet       `json:"textOffSet" gorm:"embedded;embeddedPrefix:text_"`
 	Row         OffSetConfig `json:"row" gorm:"embedded;embeddedPrefix:row_"`
