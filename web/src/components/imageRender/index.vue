@@ -38,23 +38,6 @@ const resize = () => {
 
 const render = ref(false);
 
-const load = () => {
-  const image = new window.Image();
-
-  image.setAttribute("crossOrigin", "anonymous");
-  image.src =
-    "https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/calendars/d7d83d42a87ed0ce78306cdc764748fe.jpg";
-  image.onload = () => {
-    // set image only when it is loaded
-    const width = image.width;
-    const ratio = width / image.width;
-    image.width = width;
-    image.height = image.height * ratio;
-    image2.value = image;
-    render.value = true;
-  };
-};
-
 const computedData = computed(() =>
   groupBy(
     props.data
@@ -75,8 +58,26 @@ const timeFormat = (d: Date) => {
   return m.format("HH:mm");
 };
 
+const load = () => {
+  const image = new window.Image();
+
+  image.setAttribute("crossOrigin", "anonymous");
+  image.src = currentConfig.value.image.url;
+  stageSize.height = currentConfig.value.image.height;
+  stageSize.width = currentConfig.value.image.width;
+  image.onload = () => {
+    // set image only when it is loaded
+    const width = image.width;
+    const ratio = width / image.width;
+    image.width = width;
+    image.height = image.height * ratio;
+    image2.value = image;
+    render.value = true;
+  };
+};
+
 onMounted(() => {
-  load();
+  // load();
 });
 
 let currentConfig = ref<ImageRenderConfig>({
@@ -118,6 +119,7 @@ const configChange = (id: number) => {
   if (config) {
     currentConfig.value = { ...config };
   }
+  load();
 };
 
 const fontStyle = ref<Array<String>>([]);
@@ -174,6 +176,7 @@ const onSave = () => {
           <el-collapse-item title="字体设置" name="1">
             <el-form-item label="字体">
               <el-select v-model="currentConfig.font.family" placeholder="">
+                <el-option label="默认" value="sans-serif"></el-option>
                 <el-option label="灵动指书" value="灵动指书" />
               </el-select>
             </el-form-item>
