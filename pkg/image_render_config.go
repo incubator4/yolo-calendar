@@ -31,7 +31,7 @@ type ImageRenderConfig struct {
 	ImageConfig `json:"image" gorm:"embedded;embeddedPrefix:image_"`
 	TextOffSet  OffSet       `json:"textOffSet" gorm:"embedded;embeddedPrefix:text_"`
 	Row         OffSetConfig `json:"row" gorm:"embedded;embeddedPrefix:row_"`
-	Col         OffSetConfig `json:"col" gorm:"embedded;embeddedPrefix:row_"`
+	Col         OffSetConfig `json:"col" gorm:"embedded;embeddedPrefix:col_"`
 	Font        FontConfig   `json:"font" gorm:"embedded;embeddedPrefix:font_"`
 }
 
