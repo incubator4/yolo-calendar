@@ -84,3 +84,9 @@ func WithActive() Option {
 		return db.Where("is_active = ?", true)
 	}
 }
+
+func WithOwner(id int) Option {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("own_id = ?", id)
+	}
+}

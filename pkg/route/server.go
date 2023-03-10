@@ -28,6 +28,11 @@ func NewServer() *gin.Engine {
 		registerEventTag(eventTags)
 	}
 
+	{
+		imageRender := api.Group("/image_render")
+		registerImageRender(imageRender)
+	}
+
 	r.GET("/api/ics/:uid", func(c *gin.Context) {
 		UID := c.Param("uid")
 
