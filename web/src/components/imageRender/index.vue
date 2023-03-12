@@ -151,6 +151,8 @@ const onSave = () => {
 
   //   stage.value?.toImage();
 };
+
+const strokeWidth = ref(2);
 </script>
 <template>
   <el-container>
@@ -223,6 +225,14 @@ const onSave = () => {
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-form-item label="样式">
+              <el-input-number
+                style="width: 100%"
+                :max="10"
+                v-model="strokeWidth"
+                placeholder=""
+              />
+            </el-form-item>
             <el-form-item label="样式">
               <el-checkbox-group v-model="fontStyle">
                 <el-checkbox label="italic" />
@@ -330,6 +340,7 @@ const onSave = () => {
                       fontFamily: currentConfig.font.family,
                       fontStyle: curFontStyle,
                       stroke: currentConfig.font.stroke,
+                      strokeWidth,
                       fill: currentConfig.font.color,
                       x: currentConfig.col.x * i,
                       y: currentConfig.col.y * i,
@@ -371,6 +382,7 @@ const onSave = () => {
                       fontFamily: currentConfig.font.family,
                       fontStyle: curFontStyle,
                       stroke: currentConfig.font.stroke,
+                      strokeWidth,
                       fill: currentConfig.font.color,
                       x: currentConfig.col.x * i,
                       y: currentConfig.col.y * i,
