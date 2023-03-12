@@ -87,7 +87,12 @@ let currentConfig = ref<ImageRenderConfig>({
     width: 0,
     height: 0,
   },
-  textOffSet: {
+  text_offset: {
+    x: 0,
+    y: 0,
+  },
+  text_group: [[]],
+  text_group_offset: {
     x: 0,
     y: 0,
   },
@@ -217,14 +222,14 @@ const onSave = () => {
             <el-form-item label="横向偏移">
               <el-input-number
                 size="small"
-                v-model="currentConfig.textOffSet.x"
+                v-model="currentConfig.text_offset.x"
                 placeholder=""
               />
             </el-form-item>
             <el-form-item label="纵向偏移">
               <el-input-number
                 size="small"
-                v-model="currentConfig.textOffSet.y"
+                v-model="currentConfig.text_offset.y"
                 placeholder=""
               />
             </el-form-item>
@@ -275,7 +280,7 @@ const onSave = () => {
                 }"
               />
             </v-layer>
-            <v-layer :config="{ ...currentConfig.textOffSet }">
+            <v-layer :config="{ ...currentConfig.text_offset }">
               <v-group
                 v-for="(dayCal, index) in computedData"
                 :config="{
@@ -307,7 +312,7 @@ const onSave = () => {
                 }"
               />
             </v-layer>
-            <v-layer :config="{ ...currentConfig.textOffSet }">
+            <v-layer :config="{ ...currentConfig.text_offset }">
               <v-group
                 v-for="(dayCal, index) in computedData"
                 :config="{

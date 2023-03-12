@@ -49,7 +49,7 @@ interface ImageRenderConfig {
   id?: number;
   name: string;
   image: ImageConfig;
-  text_offSet: OffSet;
+  text_offset: OffSet;
   text_group: Array<Array<number>>;
   text_group_offset: OffSet;
   row: OffSetConfig;
