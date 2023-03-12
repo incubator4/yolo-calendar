@@ -5,10 +5,14 @@ import { groupBy } from "lodash";
 import Avatar from "./icons/Avatar.vue";
 import Calendar from "./Calendar/index.vue";
 import { useScreen } from "vue-screen";
+import { useLocalStorage } from "@vueuse/core";
+import { useRoute } from "vue-router";
 
 const vtuberStore = useVtuberStore();
 const calendarStore = useCalendarStore();
-const screen = useScreen();
+const route = useRoute();
+
+const localStorage = useLocalStorage<Array<number>>("vtuber", []);
 
 const getUID = (cid: number) =>
   (vtuberStore.vtubers.find((c) => c.id === cid) || { uid: 0 }).uid;
@@ -29,7 +33,12 @@ const currentDay = ref(moment().days() === 0 ? 7 : moment().days());
 vtuberStore.fetchAll().then(() => {
   checkAll.value = true;
   isIndeterminate.value = false;
-  handleCheckAllChange(true);
+
+  if (route.query["vtuber"]) {
+    console.log(route.query["vtuber"]);
+  } else {
+    checkboxVtubers.value = localStorage.value;
+  }
 });
 
 calendarStore.listCalendar({
@@ -88,11 +97,8 @@ const handleCheckAllChange = (val: boolean) => {
   isIndeterminate.value = false;
 };
 
-const handleCheckedVtubersChange = (value: string[]) => {
-  const checkedCount = value.length;
-  checkAll.value = checkedCount === vtuberStore.vtubers.length;
-  isIndeterminate.value =
-    checkedCount > 0 && checkedCount < vtuberStore.vtubers.length;
+const handleCheckedVtubersChange = (value: number[]) => {
+  localStorage.value = value;
 };
 </script>
 
@@ -102,6 +108,7 @@ const handleCheckedVtubersChange = (value: string[]) => {
       <el-select
         style="width: 100%"
         v-model="checkboxVtubers"
+        @change="handleCheckedVtubersChange"
         filterable
         multiple
         placeholder="Select"
