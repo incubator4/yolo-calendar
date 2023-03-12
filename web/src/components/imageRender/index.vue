@@ -112,6 +112,7 @@ let currentConfig = ref<ImageRenderConfig>({
     family: "",
     size: 0,
     color: "",
+    stroke: "",
     style: "",
     layout: "",
   },
@@ -183,6 +184,10 @@ const onSave = () => {
               <el-select v-model="currentConfig.font.family" placeholder="">
                 <el-option label="默认" value="sans-serif"></el-option>
                 <el-option label="灵动指书" value="灵动指书" />
+                <el-option
+                  label="SmileySans-Oblique"
+                  value="SmileySans-Oblique"
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="字号">
@@ -197,6 +202,14 @@ const onSave = () => {
                 <el-form-item label="颜色">
                   <el-color-picker
                     v-model="currentConfig.font.color"
+                    show-alpha
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="边框">
+                  <el-color-picker
+                    v-model="currentConfig.font.stroke"
                     show-alpha
                   />
                 </el-form-item>
@@ -316,6 +329,7 @@ const onSave = () => {
                       fontSize: currentConfig.font.size,
                       fontFamily: currentConfig.font.family,
                       fontStyle: curFontStyle,
+                      stroke: currentConfig.font.stroke,
                       fill: currentConfig.font.color,
                       x: currentConfig.col.x * i,
                       y: currentConfig.col.y * i,
@@ -356,6 +370,7 @@ const onSave = () => {
                       fontSize: currentConfig.font.size,
                       fontFamily: currentConfig.font.family,
                       fontStyle: curFontStyle,
+                      stroke: currentConfig.font.stroke,
                       fill: currentConfig.font.color,
                       x: currentConfig.col.x * i,
                       y: currentConfig.col.y * i,

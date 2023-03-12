@@ -27,6 +27,7 @@ type FontConfig struct {
 	Family string `json:"family" gorm:"column:family"`
 	Size   int    `json:"size" gorm:"column:size"`
 	Color  string `json:"color" gorm:"column:color"`
+	Stroke string `json:"stroke" gorm:"column:stroke"`
 	Layout string `json:"layout" gorm:"column:layout"`
 	Style  string `json:"style" gorm:"column:style"`
 }

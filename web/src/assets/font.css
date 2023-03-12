@@ -6,3 +6,12 @@
   /* 用于设置当前字体的风格 */
   font-style: normal;
 }
+
+@font-face {
+  font-family: "SmileySans-Oblique";
+  src: url("https://yolo-1256553639.cos.ap-shanghai.myqcloud.com/fonts/SmileySans-Oblique.ttf");
+  /* 用于设置当前字体是否为粗体 */
+  font-weight: normal;
+  /* 用于设置当前字体的风格 */
+  font-style: normal;
+}
