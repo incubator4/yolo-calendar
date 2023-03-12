@@ -153,6 +153,8 @@ const onSave = () => {
 };
 
 const strokeWidth = ref(2);
+
+const defaultNoEvent = ref("无日程");
 </script>
 <template>
   <el-container>
@@ -242,6 +244,9 @@ const strokeWidth = ref(2);
           </el-collapse-item>
           <el-collapse-item title="文本设置" name="2">
             <template #title> 文本设置 </template>
+            <el-form-item label="无日程设置">
+              <el-input v-model="defaultNoEvent" placeholder=""></el-input>
+            </el-form-item>
             <el-form-item label="横向偏移">
               <el-input-number
                 size="small"
@@ -332,20 +337,36 @@ const strokeWidth = ref(2);
                     y: currentConfig.row.y * +index,
                   }"
                 >
-                  <v-text
-                    v-for="(cal, i) in computedData[group]"
-                    :config="{
-                      text: timeFormat(cal.start_time) + cal.title,
-                      fontSize: currentConfig.font.size,
-                      fontFamily: currentConfig.font.family,
-                      fontStyle: curFontStyle,
-                      stroke: currentConfig.font.stroke,
-                      strokeWidth,
-                      fill: currentConfig.font.color,
-                      x: currentConfig.col.x * i,
-                      y: currentConfig.col.y * i,
-                    }"
-                  ></v-text>
+                  <v-group v-if="computedData[group]">
+                    <v-text
+                      v-for="(cal, i) in computedData[group]"
+                      :config="{
+                        text: timeFormat(cal.start_time) + cal.title,
+                        fontSize: currentConfig.font.size,
+                        fontFamily: currentConfig.font.family,
+                        fontStyle: curFontStyle,
+                        stroke: currentConfig.font.stroke,
+                        strokeWidth,
+                        fill: currentConfig.font.color,
+                        x: currentConfig.col.x * i,
+                        y: currentConfig.col.y * i,
+                      }"
+                    ></v-text>
+                  </v-group>
+                  <v-group v-else>
+                    <v-text
+                      :config="{
+                        text: defaultNoEvent,
+                        align: 'center',
+                        fontSize: currentConfig.font.size,
+                        fontFamily: currentConfig.font.family,
+                        fontStyle: curFontStyle,
+                        stroke: currentConfig.font.stroke,
+                        strokeWidth,
+                        fill: currentConfig.font.color,
+                      }"
+                    ></v-text>
+                  </v-group>
                 </v-group>
               </v-group>
             </v-layer>
@@ -374,20 +395,36 @@ const strokeWidth = ref(2);
                     y: currentConfig.row.y * +index,
                   }"
                 >
-                  <v-text
-                    v-for="(cal, i) in computedData[group]"
-                    :config="{
-                      text: timeFormat(cal.start_time) + cal.title,
-                      fontSize: currentConfig.font.size,
-                      fontFamily: currentConfig.font.family,
-                      fontStyle: curFontStyle,
-                      stroke: currentConfig.font.stroke,
-                      strokeWidth,
-                      fill: currentConfig.font.color,
-                      x: currentConfig.col.x * i,
-                      y: currentConfig.col.y * i,
-                    }"
-                  ></v-text>
+                  <v-group v-if="computedData[group]">
+                    <v-text
+                      v-for="(cal, i) in computedData[group]"
+                      :config="{
+                        text: timeFormat(cal.start_time) + cal.title,
+                        fontSize: currentConfig.font.size,
+                        fontFamily: currentConfig.font.family,
+                        fontStyle: curFontStyle,
+                        stroke: currentConfig.font.stroke,
+                        strokeWidth,
+                        fill: currentConfig.font.color,
+                        x: currentConfig.col.x * i,
+                        y: currentConfig.col.y * i,
+                      }"
+                    ></v-text>
+                  </v-group>
+                  <v-group v-else>
+                    <v-text
+                      :config="{
+                        text: defaultNoEvent,
+                        align: 'center',
+                        fontSize: currentConfig.font.size,
+                        fontFamily: currentConfig.font.family,
+                        fontStyle: curFontStyle,
+                        stroke: currentConfig.font.stroke,
+                        strokeWidth,
+                        fill: currentConfig.font.color,
+                      }"
+                    ></v-text>
+                  </v-group>
                 </v-group>
               </v-group>
             </v-layer>
