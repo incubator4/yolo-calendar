@@ -336,24 +336,32 @@ const onSave = () => {
             </v-layer>
             <v-layer :config="{ ...currentConfig.text_offset }">
               <v-group
-                v-for="(dayCal, index) in computedData"
+                v-for="(subGroup, gIndex) in currentConfig.text_group"
                 :config="{
-                  x: currentConfig.row.x * +index,
-                  y: currentConfig.row.y * +index,
+                  x: currentConfig.text_group_offset.x * gIndex,
+                  y: currentConfig.text_group_offset.y * gIndex,
                 }"
               >
-                <v-text
-                  v-for="(cal, i) in computedData[index]"
+                <v-group
+                  v-for="(group, index) in subGroup"
                   :config="{
-                    text: timeFormat(cal.start_time) + cal.title,
-                    fontSize: currentConfig.font.size,
-                    fontFamily: currentConfig.font.family,
-                    fontStyle: curFontStyle,
-                    fill: currentConfig.font.color,
-                    x: currentConfig.col.x * i,
-                    y: currentConfig.col.y * i,
+                    x: currentConfig.row.x * +index,
+                    y: currentConfig.row.y * +index,
                   }"
-                ></v-text>
+                >
+                  <v-text
+                    v-for="(cal, i) in computedData[group]"
+                    :config="{
+                      text: timeFormat(cal.start_time) + cal.title,
+                      fontSize: currentConfig.font.size,
+                      fontFamily: currentConfig.font.family,
+                      fontStyle: curFontStyle,
+                      fill: currentConfig.font.color,
+                      x: currentConfig.col.x * i,
+                      y: currentConfig.col.y * i,
+                    }"
+                  ></v-text>
+                </v-group>
               </v-group>
             </v-layer>
           </v-stage>
