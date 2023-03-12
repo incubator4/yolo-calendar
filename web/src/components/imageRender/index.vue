@@ -217,8 +217,8 @@ const onSave = () => {
               </el-checkbox-group>
             </el-form-item>
           </el-collapse-item>
-          <el-collapse-item title="偏移设置" name="2">
-            <template #title> 偏移设置 </template>
+          <el-collapse-item title="文本设置" name="2">
+            <template #title> 文本设置 </template>
             <el-form-item label="横向偏移">
               <el-input-number
                 size="small"
@@ -230,6 +230,20 @@ const onSave = () => {
               <el-input-number
                 size="small"
                 v-model="currentConfig.text_offset.y"
+                placeholder=""
+              />
+            </el-form-item>
+            <el-form-item label="横向间距">
+              <el-input-number
+                size="small"
+                v-model="currentConfig.text_group_offset.x"
+                placeholder=""
+              />
+            </el-form-item>
+            <el-form-item label="纵向间距">
+              <el-input-number
+                size="small"
+                v-model="currentConfig.text_group_offset.y"
                 placeholder=""
               />
             </el-form-item>
@@ -282,24 +296,32 @@ const onSave = () => {
             </v-layer>
             <v-layer :config="{ ...currentConfig.text_offset }">
               <v-group
-                v-for="(dayCal, index) in computedData"
+                v-for="(subGroup, gIndex) in currentConfig.text_group"
                 :config="{
-                  x: currentConfig.row.x * +index,
-                  y: currentConfig.row.y * +index,
+                  x: currentConfig.text_group_offset.x * gIndex,
+                  y: currentConfig.text_group_offset.y * gIndex,
                 }"
               >
-                <v-text
-                  v-for="(cal, i) in computedData[index]"
+                <v-group
+                  v-for="(group, index) in subGroup"
                   :config="{
-                    text: timeFormat(cal.start_time) + cal.title,
-                    fontSize: currentConfig.font.size,
-                    fontFamily: currentConfig.font.family,
-                    fontStyle: curFontStyle,
-                    fill: currentConfig.font.color,
-                    x: currentConfig.col.x * i,
-                    y: currentConfig.col.y * i,
+                    x: currentConfig.row.x * +index,
+                    y: currentConfig.row.y * +index,
                   }"
-                ></v-text>
+                >
+                  <v-text
+                    v-for="(cal, i) in computedData[group]"
+                    :config="{
+                      text: timeFormat(cal.start_time) + cal.title,
+                      fontSize: currentConfig.font.size,
+                      fontFamily: currentConfig.font.family,
+                      fontStyle: curFontStyle,
+                      fill: currentConfig.font.color,
+                      x: currentConfig.col.x * i,
+                      y: currentConfig.col.y * i,
+                    }"
+                  ></v-text>
+                </v-group>
               </v-group>
             </v-layer>
           </v-stage>
