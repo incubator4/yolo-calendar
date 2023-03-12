@@ -1,11 +1,9 @@
 package pkg
 
 import (
-	"bytes"
 	"database/sql/driver"
+	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type ImageConfig struct {
@@ -43,7 +41,7 @@ type ImageRenderConfig struct {
 	ID              uint   `json:"id" gorm:"primaryKey"`
 	Name            string `json:"name" gorm:"column:name"`
 	ImageConfig     `json:"image" gorm:"embedded;embeddedPrefix:image_"`
-	TextGroup       TextGroupArray `json:"text_group" gorm:"column:text_group;type:integer[][]"`
+	TextGroup       TextGroupArray `json:"text_group" gorm:"column:text_group;type:jsonb"`
 	TextOffSet      OffSet         `json:"text_offset" gorm:"embedded;embeddedPrefix:text_"`
 	TextGroupOffSet OffSet         `json:"text_group_offset" gorm:"embedded;embeddedPrefix:text_group_"`
 	Row             OffSetConfig   `json:"row" gorm:"embedded;embeddedPrefix:row_"`
@@ -56,26 +54,7 @@ func (ImageRenderConfig) TableName() string {
 }
 
 func (tg *TextGroupArray) Value() (driver.Value, error) {
-	var buffer bytes.Buffer
-	var arr = *tg
-	buffer.WriteByte('{')
-	for i := 0; i < len(arr); i++ {
-		if i > 0 {
-			buffer.WriteString(",{")
-		} else {
-			buffer.WriteByte('{')
-		}
-		for j := 0; j < len(arr[i]); j++ {
-			if j > 0 {
-				buffer.WriteByte(',')
-			}
-			val := strconv.Itoa(arr[i][j])
-			buffer.WriteString(val)
-		}
-		buffer.WriteByte('}')
-	}
-	buffer.WriteByte('}')
-	return buffer.Bytes(), nil
+	return json.Marshal(*tg)
 }
 
 func (tg *TextGroupArray) Scan(src interface{}) error {
@@ -94,22 +73,5 @@ func (tg *TextGroupArray) Scan(src interface{}) error {
 }
 
 func (tg *TextGroupArray) scanBytes(src []byte) error {
-	str := string(src)
-	str = strings.Trim(str, "{}")
-	rows := strings.Split(str, "},{")
-	var arr [][]int
-	for i := 0; i < len(rows); i++ {
-		cols := strings.Split(rows[i], ",")
-		var row []int
-		for j := 0; j < len(cols); j++ {
-			val, err := strconv.Atoi(cols[j])
-			if err != nil {
-				return err
-			}
-			row = append(row, val)
-		}
-		arr = append(arr, row)
-	}
-	*tg = arr
-	return nil
+	return json.Unmarshal(src, tg)
 }
