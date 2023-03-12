@@ -16,8 +16,11 @@ const qqGroup = [781289057, 659081677, 374946805, 298018245, 736532313];
 const { toClipboard } = useClipboard();
 const router = useRouter();
 
+const icsLink = (uid: number) =>
+  `webcal://${window.location.host}/api/ics/${uid}`;
+
 const onClipboard = (uid: number) => {
-  toClipboard("webcal://yolo.incubator4.com/api/ics/" + uid);
+  toClipboard(icsLink(uid));
   alert("日历链接复制成功");
 };
 
@@ -87,7 +90,7 @@ store.fetchAll();
                     </li>
 
                     <li class="scrollbar-demo-item">
-                      <a :href="`webcal://yolo.incubator4.com/api/ics/${uid}`">
+                      <a :href="icsLink(uid)">
                         <el-button class="button" :icon="Calendar">
                           订阅
                         </el-button>

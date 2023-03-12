@@ -22,7 +22,7 @@ const screen = useScreen();
 const isDark = useDark();
 
 const loadData = (uid: number) => {
-  ics.value = "webcal://yolo.incubator4.com/api/ics/" + props.uid;
+  ics.value = `webcal://${window.location.host}/api/ics/${props.uid}`;
   calendarStore.clearCalendar();
   calendarStore.listCalendar({ uid: [uid.toString()] }).then(() => {
     state.total = calendarStore.calendars.length;

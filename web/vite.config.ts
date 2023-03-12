@@ -62,7 +62,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://yolo.incubator4.com",
+        target: "https://calendar.incubator4.com",
         changeOrigin: true,
       },
     },
