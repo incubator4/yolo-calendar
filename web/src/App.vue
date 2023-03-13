@@ -28,10 +28,6 @@ const routes = [
     path: "/vtuber",
   },
   {
-    text: "Record",
-    path: "/record",
-  },
-  {
     text: "About",
     path: "/about",
   },
@@ -185,7 +181,7 @@ nav a:first-of-type {
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      color: white;
+      color: var(--el-text-color-primary);
       .main {
         font-size: 60px;
         text-align: center;
@@ -239,9 +235,9 @@ nav a:first-of-type {
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      background-image: radial-gradient(#000000 20%, transparent 0);
-      background-size: 18px 18px;
+      background-color: var(--el-bg-color-overlay);
+      // background-image: radial-gradient(#000000 20%, transparent 0);
+      // background-size: 18px 18px;
     }
   }
 }
