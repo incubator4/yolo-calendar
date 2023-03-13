@@ -20,7 +20,7 @@ jobs:
       - name: Deploy Setup Resource
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: "yolo"
+          namespace: "vtuber"
           manifests: |
             manifests/namespace.yaml
             manifests/ingressroute.yaml
@@ -28,7 +28,7 @@ jobs:
       - name: Deploy API
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: "yolo"
+          namespace: "vtuber"
           manifests: |
             manifests/api-deployment.yaml
             manifests/api-service.yaml
@@ -36,7 +36,7 @@ jobs:
       - name: Deploy Web
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: "yolo"
+          namespace: "vtuber"
           manifests: |
             manifests/web-deployment.yaml
             manifests/web-service.yaml

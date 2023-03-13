@@ -11,7 +11,7 @@ type Config struct {
 var GlobalConfig Config
 
 func init() {
-	viper.SetEnvPrefix("yolo")
+	viper.SetEnvPrefix("vtuber")
 	_ = viper.BindEnv("DB_URL")
 	_ = viper.BindEnv("TENCENTCLOUD_SECRET_ID")
 	_ = viper.BindEnv("TENCENTCLOUD_SECRET_KEY")

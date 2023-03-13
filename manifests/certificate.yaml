@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: vtuber-calendar-tls
-  namespace: yolo
+  namespace: vtuber
 spec:
   secretName: vtuber-calendar-tls
   dnsNames:
