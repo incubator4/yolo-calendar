@@ -34,5 +34,10 @@ func NewServer() *gin.Engine {
 		registerICS(ics)
 	}
 
+	{
+		status := api.Group("/status")
+		registerStatus(status)
+	}
+
 	return r
 }

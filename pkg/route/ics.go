@@ -11,7 +11,6 @@ import (
 func registerICS(g *gin.RouterGroup) {
 	g.GET("", ListCalendars)
 	g.GET("/:uid", GetICS)
-
 }
 
 func GetICS(c *gin.Context) {

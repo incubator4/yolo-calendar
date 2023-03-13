@@ -6,6 +6,8 @@ require (
 	github.com/arran4/golang-ical v0.0.0-20221122102835-109346913e54
 	github.com/gin-gonic/gin v1.8.2
 	github.com/spf13/viper v1.15.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.614
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.614
 	gorm.io/driver/postgres v1.4.6
 	gorm.io/gorm v1.24.3
 )
