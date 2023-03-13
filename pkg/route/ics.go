@@ -4,7 +4,7 @@ import (
 	"fmt"
 	ics "github.com/arran4/golang-ical"
 	"github.com/gin-gonic/gin"
-	"github.com/incubator4/yolo-calendar/pkg/dao"
+	"github.com/incubator4/vtuber-calendar/pkg/dao"
 	"net/http"
 )
 

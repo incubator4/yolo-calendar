@@ -1,6 +1,6 @@
 package dao
 
-import "github.com/incubator4/yolo-calendar/pkg"
+import "github.com/incubator4/vtuber-calendar/pkg"
 
 func ListEventTags(options ...Option) ([]pkg.EventTag, error) {
 	var tags []pkg.EventTag

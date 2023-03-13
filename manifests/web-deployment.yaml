@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yolo-calendar-web
+  name: vtuber-calendar-web
   labels:
-    app: yolo-calendar-web
+    app: vtuber-calendar-web
 spec:
   replicas: 2
   template:
     metadata:
-      name: yolo-calendar-web
+      name: vtuber-calendar-web
       labels:
-        app: yolo-calendar-web
+        app: vtuber-calendar-web
     spec:
       containers:
-        - name: yolo-calendar-web
-          image: registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar
+        - name: vtuber-calendar-web
+          image: registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
   selector:
     matchLabels:
-      app: yolo-calendar-web
+      app: vtuber-calendar-web

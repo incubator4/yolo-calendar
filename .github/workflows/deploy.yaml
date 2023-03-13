@@ -32,7 +32,7 @@ jobs:
           manifests: |
             manifests/api-deployment.yaml
             manifests/api-service.yaml
-          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:api-${{ github.sha }}"
+          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar:api-${{ github.sha }}"
       - name: Deploy Web
         uses: Azure/k8s-deploy@v4
         with:
@@ -40,5 +40,5 @@ jobs:
           manifests: |
             manifests/web-deployment.yaml
             manifests/web-service.yaml
-          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar:web-${{ github.sha }}"
+          images: "registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar:web-${{ github.sha }}"
 

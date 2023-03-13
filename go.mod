@@ -1,4 +1,4 @@
-module github.com/incubator4/yolo-calendar
+module github.com/incubator4/vtuber-calendar
 
 go 1.19
 

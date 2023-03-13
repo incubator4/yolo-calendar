@@ -1,7 +1,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: yolo-calendar
+  name: vtuber-calendar
   namespace: yolo
 spec:
   entryPoints:
@@ -10,12 +10,12 @@ spec:
     - match: ( Host(`calendar.incubator4.com`) || Host(`yolo.incubator4.com`) || Host(`yolo.k3s.incubator4.com`)) && PathPrefix(`/api`)
       kind: Rule
       services:
-        - name: yolo-calendar-api
+        - name: vtuber-calendar-api
           port: 8080
     - match: Host(`calendar.incubator4.com`) || Host(`yolo.incubator4.com`) || Host(`yolo.k3s.incubator4.com`)
       kind: Rule
       services:
-        - name: yolo-calendar-web
+        - name: vtuber-calendar-web
           port: 80
   tls:
-    secretName: yolo-calendar-tls
+    secretName: vtuber-calendar-tls

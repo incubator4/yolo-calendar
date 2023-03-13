@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yolo-calendar-api
+  name: vtuber-calendar-api
   namespace: yolo
   labels:
-    app: yolo-calendar-api
+    app: vtuber-calendar-api
 spec:
   replicas: 2
   template:
     metadata:
-      name: yolo-calendar-api
+      name: vtuber-calendar-api
       labels:
-        app: yolo-calendar-api
+        app: vtuber-calendar-api
     spec:
       containers:
-        - name: yolo-calendar-api
-          image: registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar
+        - name: vtuber-calendar-api
+          image: registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
@@ -23,4 +23,4 @@ spec:
       restartPolicy: Always
   selector:
     matchLabels:
-      app: yolo-calendar-api
+      app: vtuber-calendar-api

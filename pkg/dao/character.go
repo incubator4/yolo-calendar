@@ -1,6 +1,6 @@
 package dao
 
-import "github.com/incubator4/yolo-calendar/pkg"
+import "github.com/incubator4/vtuber-calendar/pkg"
 
 func GetCharacter(_c pkg.Character) *pkg.Character {
 	var c = new(pkg.Character)

@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"github.com/incubator4/yolo-calendar/pkg/config"
-	"github.com/incubator4/yolo-calendar/pkg/types"
+	"github.com/incubator4/vtuber-calendar/pkg/config"
+	"github.com/incubator4/vtuber-calendar/pkg/types"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

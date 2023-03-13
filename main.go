@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/incubator4/yolo-calendar/pkg/config"
-	"github.com/incubator4/yolo-calendar/pkg/route"
+	"github.com/incubator4/vtuber-calendar/pkg/config"
+	"github.com/incubator4/vtuber-calendar/pkg/route"
 )
 
 func main() {

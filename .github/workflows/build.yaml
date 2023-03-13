@@ -17,8 +17,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar
-            ghcr.io/incubator4/yolo-calendar
+            registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar
+            ghcr.io/incubator4/vtuber-calendar
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value=latest
@@ -65,8 +65,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            registry.cn-hangzhou.aliyuncs.com/incubator4/yolo-calendar
-            ghcr.io/incubator4/yolo-calendar
+            registry.cn-hangzhou.aliyuncs.com/incubator4/vtuber-calendar
+            ghcr.io/incubator4/vtuber-calendar
           # generate Docker tags based on the following events/attributes
           tags: |
             type=raw,value=latest

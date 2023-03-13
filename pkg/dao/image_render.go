@@ -1,6 +1,6 @@
 package dao
 
-import "github.com/incubator4/yolo-calendar/pkg"
+import "github.com/incubator4/vtuber-calendar/pkg"
 
 func ListImageRenderConfig(options ...Option) ([]pkg.ImageRenderConfig, error) {
 	var configs []pkg.ImageRenderConfig

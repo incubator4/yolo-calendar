@@ -3,9 +3,9 @@ package route
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/incubator4/yolo-calendar/pkg"
-	"github.com/incubator4/yolo-calendar/pkg/dao"
-	"github.com/incubator4/yolo-calendar/pkg/types"
+	"github.com/incubator4/vtuber-calendar/pkg"
+	"github.com/incubator4/vtuber-calendar/pkg/dao"
+	"github.com/incubator4/vtuber-calendar/pkg/types"
 	"net/http"
 	"time"
 )

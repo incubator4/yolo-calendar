@@ -1,6 +1,6 @@
 package dao
 
-import "github.com/incubator4/yolo-calendar/pkg"
+import "github.com/incubator4/vtuber-calendar/pkg"
 
 func ListCalendars(options ...Option) ([]pkg.CharacterCalendar, error) {
 	var calendars []pkg.CharacterCalendar

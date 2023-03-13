@@ -36,7 +36,7 @@
       <br />
       意见和建议可以通过 QQ: 337376577 和
       <el-link
-        href="https://github.com/incubator4/yolo-calendar"
+        href="https://github.com/incubator4/vtuber-calendar"
         target="_blank"
         >Github</el-link
       >联系我
