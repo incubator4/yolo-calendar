@@ -2,7 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: vtuber-calendar
-  namespace: yolo
+  namespace: vtuber
 spec:
   entryPoints:
     - websecure
