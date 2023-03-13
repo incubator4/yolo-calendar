@@ -35,6 +35,10 @@ const routes = [
     text: "About",
     path: "/about",
   },
+  {
+    text: "Status",
+    path: "/status",
+  },
 ];
 
 // todo 添加 COS API 自动检测 banners 文件名

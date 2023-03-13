@@ -32,6 +32,11 @@ const router = createRouter({
       props: true,
       component: () => import("../views/vtuber/Detail.vue"),
     },
+    {
+      path: "/status",
+      name: "Status",
+      component: () => import("../views/StatusView.vue"),
+    },
   ],
 });
 
