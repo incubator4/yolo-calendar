@@ -109,7 +109,7 @@ const calendarOptions = ref<CalendarOptions>({
 </script>
 
 <template>
-  <el-card>
+  <el-card class="card">
     <FullCalendar
       ref="fullCalendar"
       class="demo-app-calendar"
@@ -125,4 +125,8 @@ const calendarOptions = ref<CalendarOptions>({
   </el-card>
 </template>
 
-<style scoped lang="css"></style>
+<style scoped lang="css">
+.card {
+  min-height: 50vh;
+}
+</style>

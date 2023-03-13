@@ -22,11 +22,6 @@ const router = createRouter({
       component: () => import("../views/vtuber/List.vue"),
     },
     {
-      path: "/record",
-      name: "Record",
-      component: () => import("../views/record/index.vue"),
-    },
-    {
       path: "/vtuber/:uid",
       name: "VtuberDetail",
       props: true,
